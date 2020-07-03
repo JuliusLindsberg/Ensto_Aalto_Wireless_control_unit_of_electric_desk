@@ -1,0 +1,4 @@
+#ifndef ENCODER_ANALYZER
+#define ENCODER_ANALYZER
+
+#endif

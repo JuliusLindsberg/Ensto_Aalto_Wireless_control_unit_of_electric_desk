@@ -1,0 +1,5 @@
+#ifndef MOTOR_CONTROLLER_HPP
+#define MOTOR_CONTROLLER_HPP
+
+
+#endif
