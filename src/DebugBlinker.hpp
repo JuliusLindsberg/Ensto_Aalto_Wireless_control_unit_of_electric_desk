@@ -1,18 +1,21 @@
 #ifndef DEBUGBLINKER_HPP
 #define DEBUGBLINKER_HPP
-//Basically the more c++ version of #define LEDCOUNT 4. These are c++11 standard: thse can be replaced with #defines if c++11 is not supported.
-constexpr int LEDCOUNT = 4;
+//Basically the more c++ version of #define LEDCOUNT 4. These are c++11 standard: can be replaced with a plain #define macro if c++11 is covered.
+constexpr int USABLE_LED_COUNT = 3;
+
+//LED 4 is reserved for exceptions only as exception handling is not supported. Once an exception has been declared, it cannot lit off.
+void declareException();
 
 class DebugBlinker
 {
-    //inside a class static members are not part of any object. Just like in c,
-    //they are created at the start of a program and will stay in stack until the very end.
     int led;
-    //every element after public: is free to use by anyone outside this class. This is opposed to a private variable.
+    //every element after public: is free to use by anything outside this class. This is opposed to a private variable which is only for
+    //classes internal usage. There is also protected, but we probably won't be using inheritance in this project
     //the technical difference between struct and class in c++ is that struct has it's members declared public by default and
     //class has them as private.
     public:
-
+    //note that led number is reflective of the physical markings in the board. LED1 is led index 1 as opposed to led 0 like it's treated as in Zephyr.
+    //this policy is an effort order to avoid confusion. Time will tell if it backfires...
     DebugBlinker(int led_);
 
     void ledOn();

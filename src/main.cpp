@@ -1,35 +1,33 @@
-//there might be useless includes
-#include <stdio.h>
 #include <zephyr.h>
-#include <arch/cpu.h>
-#include <sys/printk.h>
 
 #include "DebugBlinker.hpp"
-
-#define SLEEPYTIME 1000
+#define ONE_SECOND 1000
 
 void main(void)
 {
-	DebugBlinker led0(0);
-	DebugBlinker led1(1);
-	DebugBlinker led2(2);
-	DebugBlinker led3(3);
-	led0.ledOn();
-	led1.ledOff();
-	led2.ledOff();
-	led3.ledOn();
-
-	while(true)
+	//This is a working example demonstration of DebugBlinky class features.
+	DebugBlinker ledone(1);
+	DebugBlinker ledtwo(2);
+	DebugBlinker ledthree(3);
+	ledone.ledOff();
+	ledtwo.ledOn();
+	ledthree.ledOn();
+	while(1)
 	{
-		k_msleep(SLEEPYTIME);
-		led3.virtualLedToggle();
-		if(led3.virtualLedState())
+		k_msleep(ONE_SECOND);
+		ledone.ledOn();
+		ledtwo.ledOff();
+		k_msleep(ONE_SECOND);
+		ledone.ledOff();
+		declareException();
+		ledthree.virtualLedToggle();
+		if(ledthree.virtualLedState())
 		{
-			led3.ledOn();
+			ledthree.ledOn();
 		}
 		else
 		{
-			led3.ledOff();
+			ledthree.ledOff();
 		}
 	}
 }
