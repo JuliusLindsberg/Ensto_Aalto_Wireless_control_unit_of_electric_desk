@@ -2,4 +2,11 @@
 #define MOTOR_CONTROLLER_HPP
 
 
+class MotorController {
+    public:
+    MotorController();
+    bool readButtonState();
+    void setButtonInputVoltageState(bool state);
+};
+
 #endif

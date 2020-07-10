@@ -5,6 +5,13 @@ constexpr int USABLE_LED_COUNT = 3;
 
 //LED 4 is reserved for exceptions only as exception handling is not supported. Once an exception has been declared, it cannot lit off.
 void declareException();
+bool exceptionIsDeclared();
+void DebugPrint(char* string);
+void DebugPrint(char c);
+//this is the most ineffective method of relaying information but
+//in some simple situations it might be beneficial to debug something just by counting blinks...
+//this function is blocking and intentionally takse a long time to execute.
+void numberToBlinks(int number);
 
 class DebugBlinker
 {

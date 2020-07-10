@@ -1,10 +1,14 @@
-#include "DebugBlinker.hpp"
 #include <device.h>
 #include <devicetree.h>
+#include <zephyr.h>
 #include <drivers/gpio.h>
-//#include <stdexcept.h>
+#include "DebugBlinker.hpp"
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-//ugly but potentially effective :s
+#include "DebugSwo.h"
+
 //there might be redundant FLAGS here but lets get this working first
 #define LED0_NODE DT_ALIAS(led0)
 #define LED0 DT_GPIO_LABEL(LED0_NODE, gpios)
@@ -31,26 +35,41 @@
 //Or the concept could be ditched entirely and just code everything with local variables.
 struct device* leds[USABLE_LED_COUNT];
 uint8_t pins[USABLE_LED_COUNT];
-bool initialized = false;
+bool DB_initialized = false;
 bool virtualLeds[USABLE_LED_COUNT];
+bool DB_exceptionIsDeclared = false;
+bool debugSwoInitilized = false;
+
 
 void declareException()
 {
-    struct device* exceptionLed = device_get_binding(LED3);
+    if(!exceptionIsDeclared())
+    {
+    struct device* exceptionLed = device_get_binding("GPIO_0");
     gpio_pin_configure(exceptionLed, PIN3, GPIO_OUTPUT_ACTIVE | FLAGS3);
     gpio_pin_set(exceptionLed, PIN3, 1);
+    }
+}
+
+bool exceptionIsDeclared()
+{
+    if(DB_exceptionIsDeclared)
+    {
+        return true;
+    }
+    return false;
 }
 
 
 DebugBlinker::DebugBlinker(int led_)
 {
     //gets initialized automatically the first time a DebugBlinker object is constructed and never afterwards
-    if( !(led_ < 1 || led_ > 3) )
+    if( !(led_ < 1 || led_ > USABLE_LED_COUNT) )
     {
         led = led_-1;
-        if(!initialized)
+        if(!DB_initialized)
         {
-            initialized = true;
+            DB_initialized = true;
             leds[0] = device_get_binding(LED0);
             leds[1] = device_get_binding(LED1);
             leds[2] = device_get_binding(LED2);
@@ -64,6 +83,7 @@ DebugBlinker::DebugBlinker(int led_)
     }
     else
     {
+        declareException();
         //lets see if exeptions work in Zephyr
         //throw std::out_of_range("Error: DebugBlinky only supports leds indexed as 1, 2 or 3");
         //Unfortunately no c++-style exception handling in Zephyr confirmed. Looking for alternatives...
@@ -105,4 +125,59 @@ void DebugBlinker::virtualLedToggle()
 bool DebugBlinker::virtualLedState()
 {
     return virtualLeds[led];
+}
+
+void numberToBlinks(int number)
+{
+    DebugBlinker ledOne(1);
+    DebugBlinker ledTwo(2);
+    DebugBlinker ledThree(3);
+    ledOne.ledOn();
+    ledTwo.ledOn();
+    ledThree.ledOn();
+    k_msleep(2000);
+    ledOne.ledOff();
+    ledTwo.ledOff();
+    ledThree.ledOff();
+    k_msleep(500);
+    char buffer[20] = {0};
+    sprintf(buffer, "%d", number);
+    for(char* c = buffer; *c != 0; c++)
+    {
+        ledTwo.ledOn();
+        k_msleep(2000);
+        ledTwo.ledOff();
+        k_msleep(2000);
+        ledOne.ledOff();
+        if(*c == '-')
+        {
+            ledThree.ledOn();
+            continue;
+        }
+        for(unsigned char k = (*c)-48; k > 0; k--)
+        {
+            k_msleep(1000);
+            ledOne.ledOn();
+            k_msleep(500);
+            ledOne.ledOff();
+        }
+    }
+    k_msleep(500);
+    ledOne.ledOn();
+    ledTwo.ledOn();
+    ledThree.ledOn();
+    k_msleep(500);
+    ledOne.ledOff();
+    ledTwo.ledOff();
+    ledThree.ledOff();
+}
+
+void DebugPrint(char* string)
+{
+    SWO_PrintString(string);
+}
+
+void DebugPrint(char c)
+{
+    SWO_PrintChar(c);
 }
