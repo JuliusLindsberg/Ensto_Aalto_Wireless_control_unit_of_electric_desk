@@ -78,6 +78,7 @@ void SWO_PrintChar(char c) {
   ITM_STIM_U8 = c;
 }
 
+
 void SWO_PrintString(const char *s) {
   //
   // Print out character per character
@@ -87,4 +88,11 @@ void SWO_PrintString(const char *s) {
   }
 }
 
+
+void SWO_PrintInt(int number)
+{
+  char charBuffer[20];
+  sprintf(charBuffer,"%d", number);
+  SWO_PrintString(charBuffer);
+}
 #endif

@@ -20,34 +20,9 @@ void main(void)
 	ledTwo.ledOff();
 	EncoderAnalyzer analyzer;
 	MotorController motorController;
-	//ledOne.ledOn();
-	//k_msleep(3000);
-	int counter = 0;
-	while(1){
-		motorController.setButtonInputVoltageState(1);
-		ledOne.ledOn();
-		k_msleep(1000);
-		motorController.setButtonInputVoltageState(0);
-		ledOne.ledOff();
-		k_msleep(1000);
-	}
-	return;
 	while(true)
 	{
-		//short* sample = analyzer.getSample();
-		//analyzer.debugPrintSample(sample);
-		if(motorController.readButtonState())
-		{
-			ledOne.ledOn();
-			DebugPrint("got a pin read of ");
-    		DebugPrint(motorController.readButtonState());
-    		DebugPrint("\n");
-		}
-		else{
-			ledOne.ledOff();
-		}
-		k_msleep(1000);
-		//motorController.setButtonInputVoltageState(counter%2);
-		counter++;
+		analyzer.debugPrintSample(analyzer.getSample());
+		k_msleep(200);
 	}
 }

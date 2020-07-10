@@ -29,7 +29,7 @@ MotorController::MotorController()
         gpio_pin_configure(pinDevice, BUTTON_VOLTAGE_PIN, GPIO_OUTPUT_HIGH);
         //init output pin
         //gpio_pin_configure(pinDevice, BUTTON_INPUT_PIN, GPIO_INPUT);
-        gpio_pin_set_raw(pinDevice, BUTTON_VOLTAGE_PIN, 1);
+        //gpio_pin_set_raw(pinDevice, BUTTON_VOLTAGE_PIN, 1);
     }
 }
 
@@ -51,10 +51,10 @@ bool MotorController::readButtonState()
     }
 }
 
-void MotorController::setButtonInputVoltageState(bool state)
+void MotorController::setButtonInputVoltageState(int state)
 {
-    DebugPrint("pin set to ");
-    DebugPrint(state);
-    DebugPrint("\n");
+    //DebugPrint("pin set to ");
+    //DebugPrint(state);
+    //DebugPrint("\n");
     gpio_pin_set_raw(pinDevice, BUTTON_VOLTAGE_PIN, state);
 }

@@ -6,7 +6,7 @@
 //SAMPLE_GAP_MILLISECONDS 0 basically means "do it ASAP"
 #define SAMPLE_GAP_MILLISECONDS 0
 #define INPUT_CHANNEL 0
-#define OVERSAMPLING 5
+#define OVERSAMPLING 0
 #define CALIBRATE 0
 
 class EncoderAnalyzer

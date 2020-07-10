@@ -172,12 +172,17 @@ void numberToBlinks(int number)
     ledThree.ledOff();
 }
 
-void DebugPrint(char* string)
+void DebugPrintString(char* string)
 {
     SWO_PrintString(string);
 }
 
-void DebugPrint(char c)
+void DebugPrintCharacter(char c)
 {
     SWO_PrintChar(c);
+}
+
+void DebugPrintInt(int number)
+{
+    SWO_PrintInt(number);
 }

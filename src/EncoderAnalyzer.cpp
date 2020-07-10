@@ -20,10 +20,10 @@ static struct adc_channel_cfg adcChannelConfig = {
     .gain = ADC_GAIN_1_6,
     .reference = ADC_REF_INTERNAL,
     .acquisition_time = ADC_ACQ_TIME_DEFAULT,
-    .channel_id = 0,
+    .channel_id = 1,
     .differential = 0,
 #if defined(CONFIG_ADC_CONFIGURABLE_INPUTS)
-    .input_positive = NRF_SAADC_INPUT_AIN0,
+    .input_positive = NRF_SAADC_INPUT_AIN1,     //input negative only for differential signal
 #endif
 };
 
@@ -89,12 +89,12 @@ void EncoderAnalyzer::debugPrintSample(short* sample)
         {
             //lines get culled before 600 characters
             line[strlen(line)] = '\n';
-            DebugPrint(line);
+            DebugPrintString(line);
             memset(line, 0, 600);
             it = line;
             break;
         }
     }
     line[strlen(line)] = '\n';
-    DebugPrint(line);
+    DebugPrintString(line);
 }

@@ -6,7 +6,7 @@ class MotorController {
     public:
     MotorController();
     bool readButtonState();
-    void setButtonInputVoltageState(bool state);
+    void setButtonInputVoltageState(int state);
 };
 
 #endif
