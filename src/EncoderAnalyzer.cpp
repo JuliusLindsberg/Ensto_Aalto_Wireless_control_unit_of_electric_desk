@@ -10,7 +10,13 @@
 #include "hal/nrf_saadc.h"
 
 #define ADC_NODE_LABEL DT_LABEL(DT_NODELABEL(adc))
-
+#define SAMPLE_BUFFER_SIZE 20
+#define SAMPLE_RESOLUTION 10
+//SAMPLE_GAP_MILLISECONDS 0 basically means "do it ASAP"
+#define SAMPLE_GAP_MILLISECONDS 0
+#define INPUT_CHANNEL 1
+#define OVERSAMPLING 0
+#define CALIBRATE 0
 
 bool EA_initialized = false;
 device* adcDevice;
@@ -20,7 +26,8 @@ static struct adc_channel_cfg adcChannelConfig = {
     .gain = ADC_GAIN_1_6,
     .reference = ADC_REF_INTERNAL,
     .acquisition_time = ADC_ACQ_TIME_DEFAULT,
-    .channel_id = 1,
+    //WARNING: these will be defined during runtime and changing them here doesn't change anything
+    .channel_id = 0,
     .differential = 0,
 #if defined(CONFIG_ADC_CONFIGURABLE_INPUTS)
     .input_positive = NRF_SAADC_INPUT_AIN1,     //input negative only for differential signal
@@ -34,7 +41,7 @@ const struct adc_sequence_options SampleOptions = {
 };
 const struct adc_sequence sampleSequence = {
 .options = &SampleOptions,
-.channels = 0xFF,
+.channels = BIT(INPUT_CHANNEL),
 .buffer = sampleBuffer,
 .buffer_size = SAMPLE_BUFFER_SIZE,
 .resolution = SAMPLE_RESOLUTION,
@@ -50,15 +57,15 @@ EncoderAnalyzer::EncoderAnalyzer()
     if(!EA_initialized)
     {
         adcDevice = device_get_binding("ADC_0");
-        inputChannel = INPUT_CHANNEL;
+        //inputChannel = INPUT_CHANNEL;
         if(!adcDevice)
         {
             declareException();
             return;
         }
-        adcChannelConfig.channel_id = inputChannel;
+        adcChannelConfig.channel_id = INPUT_CHANNEL;
 #if defined(CONFIG_ADC_CONFIGURABLE_INPUTS)
-        adcChannelConfig.input_positive = inputChannel+1;
+        adcChannelConfig.input_positive = INPUT_CHANNEL+1;
 #endif
         int ret = adc_channel_setup(adcDevice, &adcChannelConfig);
         if(ret != NULL)
