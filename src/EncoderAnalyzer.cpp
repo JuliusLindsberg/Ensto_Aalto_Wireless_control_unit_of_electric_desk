@@ -34,7 +34,7 @@ const struct adc_sequence_options SampleOptions = {
 };
 const struct adc_sequence sampleSequence = {
 .options = &SampleOptions,
-.channels = 1,
+.channels = 0xFF,
 .buffer = sampleBuffer,
 .buffer_size = SAMPLE_BUFFER_SIZE,
 .resolution = SAMPLE_RESOLUTION,
