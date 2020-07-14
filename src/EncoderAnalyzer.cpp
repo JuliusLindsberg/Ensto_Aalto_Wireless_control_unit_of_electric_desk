@@ -1,12 +1,13 @@
-//#include <device.h>
+#include "EncoderAnalyzer.hpp"
+#include "DebugPrinter.hpp"
+#include "DebugBlinker.hpp"
+
 #include <devicetree.h>
 #include <drivers/adc.h>
-#include <DebugBlinker.hpp>
 #include <drivers/gpio.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "EncoderAnalyzer.hpp"
 #include "hal/nrf_saadc.h"
 
 #define ADC_NODE_LABEL DT_LABEL(DT_NODELABEL(adc))
@@ -16,7 +17,8 @@
 #define SAMPLE_GAP_MILLISECONDS 0
 #define INPUT_CHANNEL 1
 #define OVERSAMPLING 0
-#define CALIBRATE 0
+#define CALIBRATE 1
+#define EXTRA_SAMPLINGS 0
 
 bool EA_initialized = false;
 device* adcDevice;
@@ -37,7 +39,7 @@ static struct adc_channel_cfg adcChannelConfig = {
 const struct adc_sequence_options SampleOptions = {
     .interval_us = 0,
     .callback = NULL,
-    .extra_samplings = 0
+    .extra_samplings = EXTRA_SAMPLINGS
 };
 const struct adc_sequence sampleSequence = {
 .options = &SampleOptions,
@@ -88,6 +90,7 @@ void EncoderAnalyzer::debugPrintSample(short* sample)
 {
     char line[600] = {0};
     char* it = line;
+    DebugPrinter printer;
     for(unsigned i = 0; i < SAMPLE_BUFFER_SIZE; i++)
     {
         sprintf(it, "%d ", sample[i]);
@@ -96,12 +99,12 @@ void EncoderAnalyzer::debugPrintSample(short* sample)
         {
             //lines get culled before 600 characters
             line[strlen(line)] = '\n';
-            DebugPrintString(line);
+            printer << line;
             memset(line, 0, 600);
             it = line;
             break;
         }
     }
     line[strlen(line)] = '\n';
-    DebugPrintString(line);
+    printer << line;
 }

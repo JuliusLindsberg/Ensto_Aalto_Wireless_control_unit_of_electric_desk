@@ -23,7 +23,7 @@ Then clone this git repository inside the zephyrproject/zephyr folder. With a li
 ### Building our project
 We use Zephyr's west tool to build our project in a similiar fashion as the tutorial above does. In order to build this project navigate to this git repository in your shell and then execute:
 ```
-west build -p auto -b nrf52840_pca10056 ./
+west build -p auto -b nrf52840dk_nrf52840 ./
 ```
 
 However, if your microcontroller is not NRF52840, then -b option should naturally be something else than nrf52840_pca10056.

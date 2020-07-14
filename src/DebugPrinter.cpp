@@ -1,5 +1,10 @@
-#ifndef DEBUG_SWO_H
-#define DEBUG_SWO_H
+
+#include "DebugPrinter.hpp"
+#include <stdio.h>
+#include <zephyr.h>
+
+bool DPInitialized = false;
+
 
 #define ITM_ENA   (*(volatile unsigned int*)0xE0000E00) // ITM Enable
 #define ITM_TPR   (*(volatile unsigned int*)0xE0000E40) // Trace Privilege
@@ -89,10 +94,52 @@ void SWO_PrintString(const char *s) {
 }
 
 
-void SWO_PrintInt(int number)
+void SWO_PrintInt(const int number)
 {
   char charBuffer[20];
   sprintf(charBuffer,"%d", number);
   SWO_PrintString(charBuffer);
 }
-#endif
+
+DebugPrinter::DebugPrinter()
+{
+    if(!DPInitialized)
+    {
+        DPInitialized = true;
+        //untested!
+        _EnableSWO();
+    }
+}
+
+void DebugPrinter::PrintString(const char* string)
+{
+    SWO_PrintString(string);
+}
+
+void DebugPrinter::PrintCharacter(const char c)
+{
+    SWO_PrintChar(c);
+}
+
+void DebugPrinter::PrintInt(const int number)
+{
+    SWO_PrintInt(number);
+}
+
+const DebugPrinter& DebugPrinter::operator<<(const int a)
+{
+    PrintInt(a);
+    return *this;
+}
+
+const DebugPrinter& DebugPrinter::operator<<(const char a)
+{
+    PrintCharacter(a);
+    return *this;
+}
+
+const DebugPrinter& DebugPrinter::operator<<(const char* a)
+{
+    PrintString(a);
+    return *this;
+}

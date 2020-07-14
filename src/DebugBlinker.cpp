@@ -1,13 +1,11 @@
+#include "DebugBlinker.hpp"
+
 #include <device.h>
 #include <devicetree.h>
 #include <zephyr.h>
 #include <drivers/gpio.h>
-#include "DebugBlinker.hpp"
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "DebugSwo.h"
 
 //there might be redundant FLAGS here but lets get this working first
 #define LED0_NODE DT_ALIAS(led0)
@@ -170,19 +168,4 @@ void numberToBlinks(int number)
     ledOne.ledOff();
     ledTwo.ledOff();
     ledThree.ledOff();
-}
-
-void DebugPrintString(char* string)
-{
-    SWO_PrintString(string);
-}
-
-void DebugPrintCharacter(char c)
-{
-    SWO_PrintChar(c);
-}
-
-void DebugPrintInt(int number)
-{
-    SWO_PrintInt(number);
 }
