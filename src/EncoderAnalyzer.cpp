@@ -63,6 +63,13 @@ EncoderAnalyzer::EncoderAnalyzer()
 {
     if(!EA_initialized)
     {
+        //ad hoc
+        upDown = 1;
+        sample = 0;
+        lastSample = 0;
+        signalLevel = 0;
+        //will be retrieved from memory
+        encoderStep = 0;
         adcDevice = device_get_binding("ADC_0");
         //inputChannel = INPUT_CHANNEL;
         if(!adcDevice)

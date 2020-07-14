@@ -13,7 +13,7 @@ class EncoderAnalyzer
     // we know the direction of the encoder from the control signal (bluetooth or button).
     // 1 is up 0 is down.
     // for now it is 1.
-    bool upDown = 1;
+    bool upDown;
     
     //int inputChannel = INPUT_CHANNEL;
     
