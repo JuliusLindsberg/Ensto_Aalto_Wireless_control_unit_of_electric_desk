@@ -20,6 +20,11 @@
 #define CALIBRATE 1
 #define EXTRA_SAMPLINGS 0
 
+// Signal thresholds to compare the signal to (if its peak middle or valley)
+// subject to change depending on the microcontroller used to test
+#define THRESHOLD_LOW 610
+#define THRESHOLD_HIGH 625
+
 bool EA_initialized = false;
 device* adcDevice;
 short sampleBuffer[SAMPLE_BUFFER_SIZE] = {0};
@@ -105,4 +110,32 @@ void EncoderAnalyzer::debugPrintSample(short sample)
     }
     line[strlen(line)] = '\n';
     printer << line;*/
+}
+
+int EncoderAnalyzer::levelAnalyzer(short sample){
+  if (sample >= THRESHOLD_LOW){
+    if (sample >= THRESHOLD_HIGH){
+      return 2;
+    }
+    else {
+      return 1;
+    }
+  }
+  else {
+    return 0;
+  }
+}
+
+void EncoderAnalyzer::analyze(short sample) {
+  if (upDown){
+    if ((signalLevel != 2) && (levelAnalyzer(sample) == 2)) {
+      encoderStep++;
+    }
+  }
+  else {
+    if ((signalLevel == 2) && (levelAnalyzer(sample) != 2)) {
+      encoderStep--;
+    }
+  }
+  signalLevel = levelAnalyzer(sample);
 }
