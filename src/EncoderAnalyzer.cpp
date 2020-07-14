@@ -83,7 +83,11 @@ EncoderAnalyzer::EncoderAnalyzer()
 //fills sampleBuffer with samples
 short* EncoderAnalyzer::getSample()
 {
-    adc_read(adcDevice, &sampleSequence);
+    for(int i = 0; i < SAMPLE_BUFFER_SIZE; i++)
+    {
+        //extra samples without multiple calls to adc_read probably requires a callback function to be setup (?)
+        adc_read(adcDevice, &sampleSequence+i);
+    }
     return sampleBuffer;
 }
 void EncoderAnalyzer::debugPrintSample(short* sample)
