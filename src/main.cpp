@@ -2,6 +2,7 @@
 #include "DebugBlinker.hpp"
 #include "EncoderAnalyzer.hpp"
 #include "MotorController.hpp"
+#include "BluetoothModule.hpp"
 #include <string.h>
 #define ONE_SECOND 1000
 #include <stdio.h>
@@ -18,11 +19,9 @@ void main(void)
 	ledThree.ledOff();
 	ledOne.ledOff();
 	ledTwo.ledOff();
-	EncoderAnalyzer analyzer;
-	MotorController motorController;
+	BluetoothModule bluetooth;
 	while(true)
 	{
-		analyzer.debugPrintSample(analyzer.getSample());
-		k_msleep(200);
+		
 	}
 }
