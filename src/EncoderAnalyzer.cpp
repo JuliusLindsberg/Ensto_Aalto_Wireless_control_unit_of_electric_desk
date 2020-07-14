@@ -11,7 +11,7 @@
 #include "hal/nrf_saadc.h"
 
 #define ADC_NODE_LABEL DT_LABEL(DT_NODELABEL(adc))
-#define SAMPLE_BUFFER_SIZE 20
+#define SAMPLE_BUFFER_SIZE 2
 #define SAMPLE_RESOLUTION 10
 //SAMPLE_GAP_MILLISECONDS 0 basically means "do it ASAP"
 #define SAMPLE_GAP_MILLISECONDS 0
@@ -81,21 +81,15 @@ EncoderAnalyzer::EncoderAnalyzer()
 
 
 //fills sampleBuffer with samples
-short* EncoderAnalyzer::getSample()
+short EncoderAnalyzer::getSample()
 {
-    for(int i = 0; i < SAMPLE_BUFFER_SIZE; i++)
-    {
-        //extra samples without multiple calls to adc_read probably requires a callback function to be setup (?)
-        adc_read(adcDevice, &sampleSequence+i);
-    }
-    return sampleBuffer;
+    //extra samples without multiple calls to adc_read probably requires a callback function to be setup (?)
+    adc_read(adcDevice, &sampleSequence);
+    return sampleBuffer[0];
 }
-void EncoderAnalyzer::debugPrintSample(short* sample)
+void EncoderAnalyzer::debugPrintSample(short sample)
 {
-    char line[600] = {0};
-    char* it = line;
-    DebugPrinter printer;
-    for(unsigned i = 0; i < SAMPLE_BUFFER_SIZE; i++)
+    /*for(unsigned i = 0; i < SAMPLE_BUFFER_SIZE; i++)
     {
         sprintf(it, "%d ", sample[i]);
         it = line + strlen(line);
@@ -110,5 +104,5 @@ void EncoderAnalyzer::debugPrintSample(short* sample)
         }
     }
     line[strlen(line)] = '\n';
-    printer << line;
+    printer << line;*/
 }

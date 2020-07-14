@@ -2,6 +2,7 @@
 #include "DebugBlinker.hpp"
 #include "EncoderAnalyzer.hpp"
 #include "MotorController.hpp"
+#include "DebugPrinter.hpp"
 #include <string.h>
 #define ONE_SECOND 1000
 #include <stdio.h>
@@ -20,9 +21,28 @@ void main(void)
 	ledTwo.ledOff();
 	EncoderAnalyzer analyzer;
 	MotorController motorController;
+	DebugPrinter printer;
+	k_msleep(10000);
+	int sampleSize = 500;
+	short buffer[sampleSize];
+	ledOne.ledOn();
+	for(unsigned i = 0; i < sampleSize; i++)
+	{
+		buffer[i] = analyzer.getSample();
+	}
+	ledTwo.ledOn();
+	k_msleep(1000);
+	for(unsigned i = 0; i < sampleSize; i++)
+	{
+		printer << buffer[i];
+		printer << " ";
+		if(i%20 == 0)
+		{
+			printer<<"\n";
+		}
+	}
 	while(true)
 	{
-		analyzer.debugPrintSample(analyzer.getSample());
-		k_msleep(200);
+		k_msleep(ONE_SECOND);
 	}
 }

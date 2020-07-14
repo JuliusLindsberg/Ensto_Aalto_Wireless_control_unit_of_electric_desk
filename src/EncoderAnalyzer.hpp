@@ -6,8 +6,8 @@ class EncoderAnalyzer
     //int inputChannel = INPUT_CHANNEL;
     public:
     EncoderAnalyzer();
-    short* getSample();
-    void debugPrintSample(short* sample);
+    short getSample();
+    void debugPrintSample(short sample);
 };
 
 
