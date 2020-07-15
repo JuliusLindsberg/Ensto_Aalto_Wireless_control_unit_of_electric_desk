@@ -2,11 +2,11 @@
 #include "DebugBlinker.hpp"
 #include "EncoderAnalyzer.hpp"
 #include "MotorController.hpp"
-<<<<<<< HEAD
+
 #include "BluetoothModule.hpp"
-=======
+
 #include "DebugPrinter.hpp"
->>>>>>> master
+
 #include <string.h>
 #define ONE_SECOND 1000
 #include <stdio.h>
@@ -23,23 +23,10 @@ void main(void)
 	ledThree.ledOff();
 	ledOne.ledOff();
 	ledTwo.ledOff();
-<<<<<<< HEAD
+	DebugPrinter printer;
 	BluetoothModule bluetooth;
 	while(true)
 	{
-		
-=======
-	EncoderAnalyzer analyzer;
-	MotorController motorController;
-	DebugPrinter printer;
-	int counter = 0;
-
-	while(true)
-	{
-		int pos = analyzer.updateAndGetDeskPosition();
-		k_msleep(4);
-		printer << "Desk position: " << pos << "\n";
->>>>>>> master
+		k_msleep(200);
 	}
-
 }
