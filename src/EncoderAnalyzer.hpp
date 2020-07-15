@@ -1,6 +1,8 @@
 #ifndef ENCODER_ANALYZER
 #define ENCODER_ANALYZER
 
+//WARNING: OBJECT ABSTRACTION IN THIS CLASS IS CURRENTLY BROKEN! DON'T MAKE MULTIPLE OBJECTS OF THIS CLASS.
+//maintenance required.
 class EncoderAnalyzer
 {
     int signalLevel;
@@ -21,15 +23,16 @@ class EncoderAnalyzer
     // 0 is the valley, 1 is middle and 2 the peak.
     // we only need positions 0 and 1 but position 2 is still here if we want
     // to know the direction from the signal at some later time.
-    int levelAnalyzer(short sample);
+    int analyzeLevel(short sample);
     
     // Keeps track of the position by updating encoderStep.
-    void analyze(short sample);
-    
+    void analyzeStep(short sample);
+    //gets a single sample from the adc
+    short getSample();
     public:
     EncoderAnalyzer();
-    short getSample();
-    void debugPrintSample(short sample);
+    //WARNING: CURRENTLY THIS FUNCTION IS BLOCKING AND HAS TO BE EXECUTED REPEATEDLY FOR CORRECT READINGS
+    int updateAndGetDeskPosition();
 };
 
 

@@ -111,34 +111,34 @@ DebugPrinter::DebugPrinter()
     }
 }
 
-void DebugPrinter::PrintString(const char* string)
+void DebugPrinter::PrintString(const char* string) const
 {
     SWO_PrintString(string);
 }
 
-void DebugPrinter::PrintCharacter(const char c)
+void DebugPrinter::PrintCharacter(char c) const
 {
     SWO_PrintChar(c);
 }
 
-void DebugPrinter::PrintInt(const int number)
+void DebugPrinter::PrintInt(int number) const
 {
     SWO_PrintInt(number);
 }
 
-const DebugPrinter& DebugPrinter::operator<<(const int a)
+const DebugPrinter& DebugPrinter::operator<<(int a) const
 {
     PrintInt(a);
     return *this;
 }
 
-const DebugPrinter& DebugPrinter::operator<<(const char a)
+const DebugPrinter& DebugPrinter::operator<<(char a) const
 {
     PrintCharacter(a);
     return *this;
 }
 
-const DebugPrinter& DebugPrinter::operator<<(const char* a)
+const DebugPrinter& DebugPrinter::operator<<(const char* a) const
 {
     PrintString(a);
     return *this;

@@ -22,27 +22,13 @@ void main(void)
 	EncoderAnalyzer analyzer;
 	MotorController motorController;
 	DebugPrinter printer;
-	k_msleep(10000);
-	int sampleSize = 500;
-	short buffer[sampleSize];
-	ledOne.ledOn();
-	for(unsigned i = 0; i < sampleSize; i++)
-	{
-		buffer[i] = analyzer.getSample();
-	}
-	ledTwo.ledOn();
-	k_msleep(1000);
-	for(unsigned i = 0; i < sampleSize; i++)
-	{
-		printer << buffer[i];
-		printer << " ";
-		if(i%20 == 0)
-		{
-			printer<<"\n";
-		}
-	}
+	int counter = 0;
+
 	while(true)
 	{
-		k_msleep(ONE_SECOND);
+		int pos = analyzer.updateAndGetDeskPosition();
+		k_msleep(4);
+		printer << "Desk position: " << pos << "\n";
 	}
+
 }

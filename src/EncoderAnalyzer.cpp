@@ -99,27 +99,8 @@ short EncoderAnalyzer::getSample()
     adc_read(adcDevice, &sampleSequence);
     return sampleBuffer[0];
 }
-void EncoderAnalyzer::debugPrintSample(short sample)
-{
-    /*for(unsigned i = 0; i < SAMPLE_BUFFER_SIZE; i++)
-    {
-        sprintf(it, "%d ", sample[i]);
-        it = line + strlen(line);
-        if(it >= line+600-2)
-        {
-            //lines get culled before 600 characters
-            line[strlen(line)] = '\n';
-            printer << line;
-            memset(line, 0, 600);
-            it = line;
-            break;
-        }
-    }
-    line[strlen(line)] = '\n';
-    printer << line;*/
-}
 
-int EncoderAnalyzer::levelAnalyzer(short sample){
+int EncoderAnalyzer::analyzeLevel(short sample){
   if (sample >= THRESHOLD_LOW){
     if (sample >= THRESHOLD_HIGH){
       return 2;
@@ -133,16 +114,22 @@ int EncoderAnalyzer::levelAnalyzer(short sample){
   }
 }
 
-void EncoderAnalyzer::analyze(short sample) {
+void EncoderAnalyzer::analyzeStep(short sample) {
   if (upDown){
-    if ((signalLevel != 2) && (levelAnalyzer(sample) == 2)) {
+    if ((signalLevel != 2) && (analyzeLevel(sample) == 2)) {
       encoderStep++;
     }
   }
   else {
-    if ((signalLevel == 2) && (levelAnalyzer(sample) != 2)) {
+    if ((signalLevel == 2) && (analyzeLevel(sample) != 2)) {
       encoderStep--;
     }
   }
-  signalLevel = levelAnalyzer(sample);
+  signalLevel = analyzeLevel(sample);
+}
+
+int EncoderAnalyzer::updateAndGetDeskPosition()
+{
+  analyzeStep(getSample());
+  return encoderStep;
 }
