@@ -5,12 +5,12 @@ class DebugPrinter
 {
     public:
     DebugPrinter();
-    void PrintString(const char* string);
-    void PrintCharacter(char c);
-    void PrintInt(int number);
-    const DebugPrinter& operator<<(const int a);
-    const DebugPrinter& operator<<(char a);
-    const DebugPrinter& operator<<(const char* a);
+    void PrintString(const char* string) const;
+    void PrintCharacter(char c) const;
+    void PrintInt(int number) const;
+    const DebugPrinter& operator<<(const int a) const;
+    const DebugPrinter& operator<<(char a) const;
+    const DebugPrinter& operator<<(const char* a) const;
 };
 
 

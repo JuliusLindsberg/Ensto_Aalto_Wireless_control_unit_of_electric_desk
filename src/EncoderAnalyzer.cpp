@@ -11,7 +11,7 @@
 #include "hal/nrf_saadc.h"
 
 #define ADC_NODE_LABEL DT_LABEL(DT_NODELABEL(adc))
-#define SAMPLE_BUFFER_SIZE 20
+#define SAMPLE_BUFFER_SIZE 2
 #define SAMPLE_RESOLUTION 10
 //SAMPLE_GAP_MILLISECONDS 0 basically means "do it ASAP"
 #define SAMPLE_GAP_MILLISECONDS 0
@@ -19,6 +19,11 @@
 #define OVERSAMPLING 0
 #define CALIBRATE 1
 #define EXTRA_SAMPLINGS 0
+
+// Signal thresholds to compare the signal to (if its peak middle or valley)
+// subject to change depending on the microcontroller used to test
+#define THRESHOLD_LOW 610
+#define THRESHOLD_HIGH 625
 
 bool EA_initialized = false;
 device* adcDevice;
@@ -58,6 +63,13 @@ EncoderAnalyzer::EncoderAnalyzer()
 {
     if(!EA_initialized)
     {
+        //ad hoc
+        upDown = 1;
+        sample = 0;
+        lastSample = 0;
+        signalLevel = 0;
+        //will be retrieved from memory
+        encoderStep = 0;
         adcDevice = device_get_binding("ADC_0");
         //inputChannel = INPUT_CHANNEL;
         if(!adcDevice)
@@ -81,30 +93,43 @@ EncoderAnalyzer::EncoderAnalyzer()
 
 
 //fills sampleBuffer with samples
-short* EncoderAnalyzer::getSample()
+short EncoderAnalyzer::getSample()
 {
+    //extra samples without multiple calls to adc_read probably requires a callback function to be setup (?)
     adc_read(adcDevice, &sampleSequence);
-    return sampleBuffer;
+    return sampleBuffer[0];
 }
-void EncoderAnalyzer::debugPrintSample(short* sample)
-{
-    char line[600] = {0};
-    char* it = line;
-    DebugPrinter printer;
-    for(unsigned i = 0; i < SAMPLE_BUFFER_SIZE; i++)
-    {
-        sprintf(it, "%d ", sample[i]);
-        it = line + strlen(line);
-        if(it >= line+600-2)
-        {
-            //lines get culled before 600 characters
-            line[strlen(line)] = '\n';
-            printer << line;
-            memset(line, 0, 600);
-            it = line;
-            break;
-        }
+
+int EncoderAnalyzer::analyzeLevel(short sample){
+  if (sample >= THRESHOLD_LOW){
+    if (sample >= THRESHOLD_HIGH){
+      return 2;
     }
-    line[strlen(line)] = '\n';
-    printer << line;
+    else {
+      return 1;
+    }
+  }
+  else {
+    return 0;
+  }
+}
+
+void EncoderAnalyzer::analyzeStep(short sample) {
+  if (upDown){
+    if ((signalLevel != 2) && (analyzeLevel(sample) == 2)) {
+      encoderStep++;
+    }
+  }
+  else {
+    if ((signalLevel == 2) && (analyzeLevel(sample) != 2)) {
+      encoderStep--;
+    }
+  }
+  signalLevel = analyzeLevel(sample);
+}
+
+int EncoderAnalyzer::updateAndGetDeskPosition()
+{
+  analyzeStep(getSample());
+  return encoderStep;
 }
