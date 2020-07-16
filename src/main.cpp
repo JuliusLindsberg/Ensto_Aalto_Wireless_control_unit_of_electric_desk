@@ -26,9 +26,9 @@ void main(void)
 
 	while(true)
 	{
+		k_msleep(2);
 		int pos = analyzer.updateAndGetDeskPosition();
-		k_msleep(4);
-		printer << "Desk position: " << pos << "\n";
+		printer << pos << "\n";
 	}
 
 }
