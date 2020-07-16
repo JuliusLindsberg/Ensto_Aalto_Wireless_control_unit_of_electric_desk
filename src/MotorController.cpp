@@ -42,7 +42,7 @@ MotorController::MotorController()
 ButtonState MotorController::readButtonState()
 {
     int retUP = gpio_pin_get_raw(pinDevice, BUTTON_UP_INPUT);
-    int retDOWN = gpio_pin_get_raw(pinDevice, BUTTON_UP_OUTPUT);
+    int retDOWN = gpio_pin_get_raw(pinDevice, BUTTON_DOWN_INPUT);
 
     if( retUP == 1 && retDOWN == 0)
     {
@@ -52,11 +52,11 @@ ButtonState MotorController::readButtonState()
     {
         return ButtonState::DOWN;
     }
-    else if(retUP == 1 && retDOWN == 1)
+    else if(retUP == 0 && retDOWN == 0)
     {
         return ButtonState::BOTH;
     }
-    else if(retUP == 0 && retDOWN == 0)
+    else if(retUP == 1 && retDOWN == 1)
     {
         return ButtonState::NOT_PRESSED;
     }
@@ -65,5 +65,29 @@ ButtonState MotorController::readButtonState()
         //in case of an unknown state the safest signal to send is ButtonState::NOT_PRESSED as then it won't move the desk due to potential error states
         declareException();
         return ButtonState::NOT_PRESSED;
+    }
+}
+
+void MotorController::steerMotor(ButtonState directive)
+{
+    if(directive == ButtonState::UP)
+    {
+        gpio_pin_set_raw(pinDevice, BUTTON_UP_OUTPUT, 1);
+        gpio_pin_set_raw(pinDevice, BUTTON_DOWN_OUTPUT, 0);
+    }
+    else if(directive == ButtonState::DOWN)
+    {
+        gpio_pin_set_raw(pinDevice, BUTTON_UP_OUTPUT, 0);
+        gpio_pin_set_raw(pinDevice, BUTTON_DOWN_OUTPUT, 1);
+    }
+    else if(directive == ButtonState::BOTH)
+    {
+        gpio_pin_set_raw(pinDevice, BUTTON_UP_OUTPUT, 1);
+        gpio_pin_set_raw(pinDevice, BUTTON_DOWN_OUTPUT, 1);
+    }
+    else
+    {
+        gpio_pin_set_raw(pinDevice, BUTTON_UP_OUTPUT, 0);
+        gpio_pin_set_raw(pinDevice, BUTTON_DOWN_OUTPUT, 0);
     }
 }

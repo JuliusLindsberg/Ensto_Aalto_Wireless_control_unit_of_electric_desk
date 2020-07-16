@@ -13,6 +13,7 @@ class MotorController {
     public:
     MotorController();
     ButtonState readButtonState();
+    void steerMotor(ButtonState directive);
 };
 
 #endif
