@@ -2,7 +2,9 @@
 #include "DebugBlinker.hpp"
 #include "EncoderAnalyzer.hpp"
 #include "MotorController.hpp"
+
 #include "DebugPrinter.hpp"
+
 #include <string.h>
 #define ONE_SECOND 1000
 #include <stdio.h>
@@ -19,16 +21,12 @@ void main(void)
 	ledThree.ledOff();
 	ledOne.ledOff();
 	ledTwo.ledOff();
-	EncoderAnalyzer analyzer;
-	MotorController motorController;
 	DebugPrinter printer;
-	int counter = 0;
-
 	while(true)
 	{
 		k_msleep(2);
 		int pos = analyzer.updateAndGetDeskPosition();
 		printer << pos << "\n";
+		k_msleep(200);
 	}
-
 }
