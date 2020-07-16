@@ -130,6 +130,9 @@ void EncoderAnalyzer::analyzeStep(short sample) {
 
 int EncoderAnalyzer::updateAndGetDeskPosition()
 {
-  analyzeStep(getSample());
+  short debugSample = getSample();
+  DebugPrinter printer;
+  printer<<" Sample: " << debugSample;
+  analyzeStep(debugSample);
   return encoderStep;
 }
