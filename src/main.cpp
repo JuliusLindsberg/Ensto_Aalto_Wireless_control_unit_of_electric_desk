@@ -22,11 +22,13 @@ void main(void)
 	ledOne.ledOff();
 	ledTwo.ledOff();
 	DebugPrinter printer;
+	MotorController motor;
 	while(true)
 	{
-		k_msleep(2);
-		int pos = analyzer.updateAndGetDeskPosition();
-		printer << pos << "\n";
+		//k_msleep(2);
+		//int pos = analyzer.updateAndGetDeskPosition();
+		//printer << pos << "\n";
+		motor.steerMotor(ButtonState::BOTH);
 		k_msleep(200);
 	}
 }
