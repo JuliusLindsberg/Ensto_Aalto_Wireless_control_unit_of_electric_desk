@@ -1,4 +1,4 @@
-/*#include "BluetoothModule.hpp"
+#include "BluetoothModule.hpp"
 
 #include <zephyr/types.h>
 #include <stddef.h>
@@ -17,13 +17,13 @@ static const struct bt_data ad[] = {
 	BT_DATA_BYTES(BT_DATA_FLAGS, BT_LE_AD_NO_BREDR),
 	BT_DATA_BYTES(BT_DATA_UUID16_ALL, 0xaa, 0xfe),
 	BT_DATA_BYTES(BT_DATA_SVC_DATA16,
-		      0xaa, 0xfe, // Eddystone UUID
-		      0x10, // Eddystone-URL frame type
-		      0x00, // Calibrated Tx power at 0m
-		      0x00, // URL Scheme Prefix http://www.
+		      0xaa, 0xfe, /* Eddystone UUID */
+		      0x10, /* Eddystone-URL frame type */
+		      0x00, /* Calibrated Tx power at 0m */
+		      0x00, /* URL Scheme Prefix http://www. */
 		      'z', 'e', 'p', 'h', 'y', 'r',
 		      'p', 'r', 'o', 'j', 'e', 'c', 't',
-		      0x08) // .org
+		      0x08) /* .org */
 };
 
 static const struct bt_data sd[] = {
@@ -47,4 +47,4 @@ BluetoothModule::BluetoothModule()
 	    }
 
     }
-}*/
+}
