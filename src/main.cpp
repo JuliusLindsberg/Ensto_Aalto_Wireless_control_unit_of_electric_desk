@@ -24,7 +24,8 @@ void main(void)
 	ledOne.ledOff();
 	ledTwo.ledOff();
 	DebugPrinter printer;
-	//BluetoothModule bluetooth;
+	BluetoothModule bluetooth;
+	bluetooth.startScanning();
 	while(true)
 	{
 		k_msleep(200);
