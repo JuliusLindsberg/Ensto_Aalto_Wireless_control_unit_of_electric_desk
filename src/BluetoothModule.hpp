@@ -12,6 +12,7 @@ class BluetoothModule
     public:
     BluetoothModule();
     void startScanning();
+    void startAdvertising();
 };
 
 #endif

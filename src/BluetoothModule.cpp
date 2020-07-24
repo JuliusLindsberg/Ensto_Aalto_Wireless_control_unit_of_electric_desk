@@ -20,13 +20,13 @@ static struct bt_conn *defaultConnection = NULL;
 static void deviceFound(const bt_addr_le_t *address, int8_t rssi, uint8_t type,
 			 struct net_buf_simple *ad);
 
-//as opposed to native C code the configurations of some functionalities in c++ are required to be done by using these kind of structs instead of
+//as opposed to C code the configurations of some functionalities in zephyr's c++ are required to be done by using these kind of structs instead of
 //some helper macros and then passed on as a reference to function calls. This is a severely undocumented phenomenom by zephyr's documentation.
 //If using a helper macro claims "taking address of temporary array" that means one should refrain from using said marco and configure as a struct
 // that the macro is defining instead.
 static struct bt_le_scan_param blueToothScanConfig =
 {
-	.type = BT_LE_SCAN_TYPE_PASSIVE,
+	.type = BT_LE_SCAN_TYPE_ACTIVE,
 	.options = BT_LE_SCAN_OPT_FILTER_DUPLICATE,
 	.interval = BT_GAP_SCAN_FAST_INTERVAL,
 	.window = BT_GAP_SCAN_FAST_WINDOW,
@@ -169,4 +169,9 @@ BluetoothModule::BluetoothModule()
 void BluetoothModule::startScanning()
 {
 	startBluetoothScan();
+}
+
+void BluetoothModule::startAdvertising()
+{
+	
 }
