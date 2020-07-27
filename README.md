@@ -1,4 +1,4 @@
-# Electric contol unit of electric desk
+# Wireless contol unit of electric desk
 This is an Aalto University student project which aims to produce a functional prototype for a wireless controller of an electric desk. It is being developed in collaboration with Ensto. Software will be published under a rather permissive MIT license. See the licence file disclosed in this repository for details.
 ## Hardware
 Our aim currently is to provide a working solution for only specific hardware. In our code there may or may not be useful generalizations for other types of hardware choices too but quite certainly our solution is not going to work right out the box.
