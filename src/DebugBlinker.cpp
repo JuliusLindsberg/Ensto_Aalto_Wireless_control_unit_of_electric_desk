@@ -99,32 +99,6 @@ void DebugBlinker::ledOff()
     gpio_pin_set(leds[led], pins[led], 0);
 }
 
-void DebugBlinker::ledToggle()
-{
-    //not implemented. This function might be stupid.
-}
-
-void DebugBlinker::virtualLedOn()
-{
-    virtualLeds[led] = true;
-}
-
-void DebugBlinker::virtualLedOff()
-{
-    virtualLeds[led] = false;
-}
-
-void DebugBlinker::virtualLedToggle()
-{
-    virtualLeds[led] = !virtualLeds[led];
-}
-
-
-bool DebugBlinker::virtualLedState()
-{
-    return virtualLeds[led];
-}
-
 void numberToBlinks(int number)
 {
     DebugBlinker ledOne(1);
