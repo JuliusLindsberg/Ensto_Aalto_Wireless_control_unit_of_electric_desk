@@ -42,8 +42,8 @@ static struct bt_conn_le_create_param createConnectionParameters = {
 };
 //default connection parameters.
 static struct bt_le_conn_param defaultConnectionParameters = {
-	.interval_min = BT_GAP_INIT_CONN_INT_MIN,
-	.interval_max = BT_GAP_INIT_CONN_INT_MAX,
+	.interval_min = BT_GAP_ADV_FAST_INT_MIN_2,
+	.interval_max = BT_GAP_ADV_FAST_INT_MAX_2,
 	.latency = 0,
 	.timeout = 400
 };
@@ -92,16 +92,18 @@ static void deviceFound(const bt_addr_le_t *address, int8_t rssi, uint8_t type,
 	}
 
 	if (bt_le_scan_stop()) {
+		printer<< "\nScan stop failed I guess\n";
 		return;
 	}
 
 	error = bt_conn_le_create(address, &createConnectionParameters,
 				&defaultConnectionParameters, &defaultConnection);
 	DebugBlinker ledThree(3);
+	DebugBlinker ledTwo(2);
+	ledTwo.ledOff();
 	ledThree.ledOn();
 	if (error) {
 		startBluetoothScan();
-		DebugBlinker ledTwo(2);
 		ledTwo.ledOn();
 	}
 }
@@ -110,6 +112,8 @@ static void deviceFound(const bt_addr_le_t *address, int8_t rssi, uint8_t type,
 //a callback function
 static void bluetoothConnected(struct bt_conn *connection, uint8_t error)
 {
+	DebugPrinter printer;
+	printer << "Bluetooth connected!";
 	char address[BT_ADDR_LE_STR_LEN];
 
 	bt_addr_le_to_str(bt_conn_get_dst(connection), address, sizeof(address));
@@ -132,6 +136,8 @@ static void bluetoothConnected(struct bt_conn *connection, uint8_t error)
 //a callback function
 static void bluetoothDisconnected(struct bt_conn *connection, uint8_t reason)
 {
+	DebugPrinter printer;
+	printer << "Bluetooth Disconnected!";
 		char address[BT_ADDR_LE_STR_LEN];
 
 	if (connection != defaultConnection) {
@@ -151,6 +157,13 @@ static struct bt_conn_cb connectionCallbacks = {
 		.disconnected = bluetoothDisconnected,
 };
 
+void BluetoothReadyCallback(int error)
+{
+	if(error)
+	{
+		declareException();
+	}
+}
 
 BluetoothModule::BluetoothModule()
 {
@@ -158,9 +171,10 @@ BluetoothModule::BluetoothModule()
     {
         int error = 0;
         initialized = true;
-        error = bt_enable(NULL);
+        error = bt_enable(BluetoothReadyCallback);
 		bt_conn_cb_register(&connectionCallbacks);
-        if (error) {
+        if (error)
+		{
             declareException();
 	    }
     }
@@ -171,7 +185,48 @@ void BluetoothModule::startScanning()
 	startBluetoothScan();
 }
 
+static const struct bt_data ad[] = {
+	BT_DATA_BYTES(BT_DATA_FLAGS, BT_LE_AD_NO_BREDR),
+	BT_DATA_BYTES(BT_DATA_UUID16_ALL, 0xaa, 0xfe),
+	BT_DATA_BYTES(BT_DATA_SVC_DATA16,
+		      0xaa, 0xfe, // Eddystone UUID
+		      0x10, // Eddystone-URL frame type
+		      0x00, // Calibrated Tx power at 0m
+		      0x00, // URL Scheme Prefix http://www.
+		      'z', 'e', 'p', 'h', 'y', 'r',
+		      'p', 'r', 'o', 'j', 'e', 'c', 't',
+		      0x08) // .org 
+};
+
+static const struct bt_data sd[] = {
+	
+	BT_DATA(BT_DATA_NAME_COMPLETE, DEVICE_NAME, DEVICE_NAME_LEN),
+};
+
+struct bt_le_adv_param advertisingParameters
+{
+	.id = BT_ID_DEFAULT,
+	.sid = 0,
+	.secondary_max_skip = 0,
+	.options = 0,
+	.interval_min = BT_GAP_ADV_SLOW_INT_MIN,
+	.interval_max = BT_GAP_ADV_SLOW_INT_MAX,
+	.peer = NULL
+};
+
+
 void BluetoothModule::startAdvertising()
 {
-	
+	int error = bt_le_adv_start(&advertisingParameters, ad, ARRAY_SIZE(ad),
+		sd, ARRAY_SIZE(sd));
+
+	/*int error = bt_le_adv_start(const struct bt_le_adv_param *param,
+		    const struct bt_data *ad, size_t ad_len,
+		    const struct bt_data *sd, size_t sd_len);*/
+	if(error)
+	{
+		DebugPrinter printer;
+		declareException();
+		printer << "Advertising failed to start ()\n";
+	}
 }

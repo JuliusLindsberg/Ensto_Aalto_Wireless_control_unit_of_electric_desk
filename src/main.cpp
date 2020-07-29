@@ -17,6 +17,7 @@
 void main(void)
 {
 	//This is a working example demonstration of DebugBlinky class features.
+	k_msleep(5000);
 	DebugBlinker ledOne(1);
 	DebugBlinker ledTwo(2);
 	DebugBlinker ledThree(3);
@@ -25,7 +26,8 @@ void main(void)
 	ledTwo.ledOff();
 	DebugPrinter printer;
 	BluetoothModule bluetooth;
-	bluetooth.startScanning();
+	k_msleep(5000);
+	bluetooth.startAdvertising();
 	while(true)
 	{
 		k_msleep(200);
