@@ -16,14 +16,14 @@
 //SAMPLE_GAP_MILLISECONDS 0 basically means "do it ASAP"
 #define SAMPLE_GAP_MILLISECONDS 0
 #define INPUT_CHANNEL 1
-#define OVERSAMPLING 0
+#define OVERSAMPLING 3
 #define CALIBRATE 1
 #define EXTRA_SAMPLINGS 0
 
 // Signal thresholds to compare the signal to (if its peak middle or valley)
 // subject to change depending on the microcontroller used to test
-#define THRESHOLD_LOW 610
-#define THRESHOLD_HIGH 625
+#define THRESHOLD_LOW 835
+#define THRESHOLD_HIGH 855
 
 bool EA_initialized = false;
 device* adcDevice;
@@ -130,6 +130,9 @@ void EncoderAnalyzer::analyzeStep(short sample) {
 
 int EncoderAnalyzer::updateAndGetDeskPosition()
 {
-  analyzeStep(getSample());
+  short debugSample = getSample();
+  DebugPrinter printer;
+  printer << debugSample << ",";
+  analyzeStep(debugSample);
   return encoderStep;
 }
