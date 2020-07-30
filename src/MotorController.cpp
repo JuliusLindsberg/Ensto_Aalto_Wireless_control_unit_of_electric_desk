@@ -21,6 +21,8 @@ bool MCInitialized = false;
 
 MotorController::MotorController()
 {
+    setState(ControlState::BUTTON);
+    targetHeight = -1;
     if(!MCInitialized)
     {
         MCInitialized = true;
@@ -90,4 +92,119 @@ void MotorController::steerMotor(ButtonState directive)
         gpio_pin_set_raw(pinDevice, BUTTON_UP_OUTPUT, 0);
         gpio_pin_set_raw(pinDevice, BUTTON_DOWN_OUTPUT, 0);
     }
+}
+
+bool MotorController::steerTowardsTarget(int tableHeight)
+{
+    if(targetHeight < 0)
+    {
+        return true;
+    }
+    if(targetDirection == TargetDirection::DOWN_DIRECTION)
+    {
+        //goal reached
+        if(tableHeight <= targetHeight)
+        {
+            return true;
+        }
+        //keep steering
+        else
+        {
+            steerMotor(ButtonState::DOWN);
+        }
+    }
+    else if(targetDirection == TargetDirection::UP_DIRECTION)
+    {
+        //goal reached
+        if(tableHeight >= targetHeight)
+        {
+            return true;
+        }
+        //keep steering
+        else
+        {
+            steerMotor(ButtonState::DOWN);
+        }
+    }
+    else
+    {
+        //this shouldnt happen. If we get here there's a bug in code.
+        declareException();
+        return true;
+    }
+    //goal has not been reached
+    return false;
+}
+
+ControlState MotorController::controlStateButton(int tableHeight, ButtonState buttonState)
+{
+    if(buttonState == ButtonState::NOT_PRESSED)
+    {
+        steerMotor(ButtonState::NOT_PRESSED);
+    }
+    else if(buttonState == ButtonState::DOWN)
+    {
+        //user wants to steer downwards via button press
+        steerMotor(ButtonState::BOTH);
+    }
+    else if(buttonState == ButtonState::UP)
+    {
+        //user wants to steer upwards via button press
+        steerMotor(ButtonState::BOTH);
+    }
+    else if(ButtonState::BOTH)
+    {
+        //no idea what is supposed to happen
+        steerMotor(ButtonState::BOTH);
+    }
+    return ControlState::BUTTON;
+}
+ControlState MotorController::controlStateBluetooth(int tableHeight, ButtonState buttonState)
+{
+    if(buttonState != ButtonState::NOT_PRESSED)
+    {
+        return ControlState::BUTTON;
+    }
+    return ControlState::BLUETOOTH;
+}
+
+void MotorController::run()
+{
+    while(1)
+    {
+        //these steps are the same for every state
+        int tableHeight = analyzer.updateAndGetDeskPosition();
+        ButtonState buttonState = readButtonState();
+        //finite state machine spesific states
+        switch (getState())
+        {
+        case ControlState::BUTTON:
+            setState(controlStateButton(tableHeight, buttonState));
+            break;
+        case ControlState::BLUETOOTH:
+            setState(controlStateBluetooth(tableHeight, buttonState));
+            break;
+        default:
+            //currently this should be logically impossible. There is no designated error state
+            declareException();
+            break;
+        }
+    }
+};
+
+ControlState MotorController::getState()
+{
+    return controlState;
+}
+
+void MotorController::setState(ControlState newState)
+{
+    controlState = newState;
+}
+
+void MotorController::bluetoothSteerRequest(int newTargetHeight)
+{
+    //this has to be reworked when bluetooth branch gets progress
+    setState(ControlState::BLUETOOTH);
+    targetHeight = newTargetHeight;
 }

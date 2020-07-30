@@ -33,6 +33,7 @@ class EncoderAnalyzer
     EncoderAnalyzer();
     //WARNING: CURRENTLY THIS FUNCTION IS BLOCKING AND HAS TO BE EXECUTED REPEATEDLY FOR CORRECT READINGS
     int updateAndGetDeskPosition();
+    int lastDeskPosition();
 };
 
 
