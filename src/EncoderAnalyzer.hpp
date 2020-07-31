@@ -1,6 +1,13 @@
 #ifndef ENCODER_ANALYZER
 #define ENCODER_ANALYZER
 
+typedef enum TargetDirection
+{
+    NONE,
+    UP_DIRECTION,
+    DOWN_DIRECTION
+} TargetDirection;
+
 //WARNING: OBJECT ABSTRACTION IN THIS CLASS IS CURRENTLY BROKEN! DON'T MAKE MULTIPLE OBJECTS OF THIS CLASS.
 //maintenance required.
 class EncoderAnalyzer
@@ -15,7 +22,7 @@ class EncoderAnalyzer
     // we know the direction of the encoder from the control signal (bluetooth or button).
     // 1 is up 0 is down.
     // for now it is 1.
-    bool upDown;
+    TargetDirection targetDirection;
     
     //int inputChannel = INPUT_CHANNEL;
     
@@ -34,6 +41,8 @@ class EncoderAnalyzer
     //WARNING: CURRENTLY THIS FUNCTION IS BLOCKING AND HAS TO BE EXECUTED REPEATEDLY FOR CORRECT READINGS
     int updateAndGetDeskPosition();
     int lastDeskPosition();
+    void setTargetDirection(TargetDirection newDirection) { targetDirection = newDirection; }
+    TargetDirection getTargetDirection() { return targetDirection; }
 };
 
 

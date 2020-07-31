@@ -16,20 +16,11 @@ typedef enum ControlState {
     BLUETOOTH
 } ControlState;
 
-typedef enum TargetDirection
-{
-    NONE,
-    UP_DIRECTION,
-    DOWN_DIRECTION
-};
-
 class MotorController {
     EncoderAnalyzer analyzer;
     //DO NOT CHANGE THE VALUE OF THIS DIRECTLY! USE GETTERS AND SETTERS there might be a need for getters or setters later on
     ControlState controlState;
     int targetHeight;
-    //-1 means down, 1 means up, 0 means no direction
-    TargetDirection targetDirection;
     ButtonState readButtonState();
     void steerMotor(ButtonState directive);
     //returns true if target has been reached, false if not

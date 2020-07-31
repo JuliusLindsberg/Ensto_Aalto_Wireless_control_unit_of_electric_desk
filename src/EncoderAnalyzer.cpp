@@ -22,8 +22,8 @@
 
 // Signal thresholds to compare the signal to (if its peak middle or valley)
 // subject to change depending on the microcontroller used to test
-#define THRESHOLD_LOW 835
-#define THRESHOLD_HIGH 855
+#define THRESHOLD_LOW 700
+#define THRESHOLD_HIGH 795
 
 bool EA_initialized = false;
 device* adcDevice;
@@ -64,12 +64,12 @@ EncoderAnalyzer::EncoderAnalyzer()
     if(!EA_initialized)
     {
         //ad hoc
-        upDown = 1;
+        targetDirection = TargetDirection::NONE;
         sample = 0;
         lastSample = 0;
         signalLevel = 0;
         //will be retrieved from memory
-        encoderStep = 0;
+        encoderStep = 100;
         adcDevice = device_get_binding("ADC_0");
         //inputChannel = INPUT_CHANNEL;
         if(!adcDevice)
@@ -115,12 +115,12 @@ int EncoderAnalyzer::analyzeLevel(short sample){
 }
 
 void EncoderAnalyzer::analyzeStep(short sample) {
-  if (upDown){
+  if (targetDirection == TargetDirection::UP_DIRECTION){
     if ((signalLevel != 2) && (analyzeLevel(sample) == 2)) {
       encoderStep++;
     }
   }
-  else {
+  else if (targetDirection == TargetDirection::DOWN_DIRECTION) {
     if ((signalLevel == 2) && (analyzeLevel(sample) != 2)) {
       encoderStep--;
     }
@@ -132,7 +132,12 @@ int EncoderAnalyzer::updateAndGetDeskPosition()
 {
   short debugSample = getSample();
   DebugPrinter printer;
-  printer << debugSample << ",";
+  printer << debugSample << "\n";
   analyzeStep(debugSample);
+  return encoderStep;
+}
+
+int EncoderAnalyzer::lastDeskPosition()
+{
   return encoderStep;
 }

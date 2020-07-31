@@ -1,6 +1,5 @@
 #include <zephyr.h>
 #include "DebugBlinker.hpp"
-#include "EncoderAnalyzer.hpp"
 #include "MotorController.hpp"
 
 #include "DebugPrinter.hpp"
@@ -18,10 +17,11 @@ void main(void)
 	DebugBlinker ledOne(1);
 	DebugBlinker ledTwo(2);
 	DebugBlinker ledThree(3);
+	DebugPrinter printer;
 	ledThree.ledOff();
 	ledOne.ledOff();
 	ledTwo.ledOff();
-	DebugPrinter printer;
+	k_msleep(10000);
 	MotorController controller;
 	//BluetoothModule bluetooth;
 	controller.run();
