@@ -3,8 +3,6 @@
 #include "EncoderAnalyzer.hpp"
 #include "MotorController.hpp"
 
-#include "BluetoothModule.hpp"
-
 #include "DebugPrinter.hpp"
 
 #include <string.h>
@@ -30,6 +28,9 @@ void main(void)
 	bluetooth.startAdvertising();
 	while(true)
 	{
+		k_msleep(2);
+		int pos = analyzer.updateAndGetDeskPosition();
+		printer << pos << "\n";
 		k_msleep(200);
 	}
 }

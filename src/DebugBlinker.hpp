@@ -26,10 +26,6 @@ class DebugBlinker
     void ledOn();
     void ledOff();
     void ledToggle();
-    void virtualLedOn();
-    void virtualLedOff();
-    void virtualLedToggle();
-    bool virtualLedState();
 };
 
 
