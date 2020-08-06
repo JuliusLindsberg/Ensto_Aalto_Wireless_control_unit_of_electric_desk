@@ -13,220 +13,168 @@
 #include <bluetooth/uuid.h>
 #include <bluetooth/gatt.h>
 #include <sys/byteorder.h>
+#include <bluetooth/services/hrs.h>
 
-bool initialized = false;
-
-static struct bt_conn *defaultConnection = NULL;
-static void deviceFound(const bt_addr_le_t *address, int8_t rssi, uint8_t type,
-			 struct net_buf_simple *ad);
-
-//as opposed to C code the configurations of some functionalities in zephyr's c++ are required to be done by using these kind of structs instead of
-//some helper macros and then passed on as a reference to function calls. This is a severely undocumented phenomenom by zephyr's documentation.
-//If using a helper macro claims "taking address of temporary array" that means one should refrain from using said marco and configure as a struct
-// that the macro is defining instead.
-static struct bt_le_scan_param blueToothScanConfig =
+const struct bt_uuid_16 tableControlUUID16 =
 {
-	.type = BT_LE_SCAN_TYPE_ACTIVE,
-	.options = BT_LE_SCAN_OPT_FILTER_DUPLICATE,
-	.interval = BT_GAP_SCAN_FAST_INTERVAL,
-	.window = BT_GAP_SCAN_FAST_WINDOW,
-	.timeout = 0,
-	.interval_coded = 0,
-	.window_coded = 0
+	.uuid = {BT_UUID_TYPE_16},
+	.val = (TABLE_CONTROL_SERVICE_UUID)
 };
 
-static struct bt_conn_le_create_param createConnectionParameters = {
-	.options = BT_CONN_LE_OPT_NONE,
-	.interval = BT_GAP_SCAN_FAST_INTERVAL,
-	.window = BT_GAP_SCAN_FAST_INTERVAL
-};
-//default connection parameters.
-static struct bt_le_conn_param defaultConnectionParameters = {
-	.interval_min = BT_GAP_ADV_FAST_INT_MIN_2,
-	.interval_max = BT_GAP_ADV_FAST_INT_MAX_2,
-	.latency = 0,
-	.timeout = 400
-};
-
-
-//this has be a static function, as it might be used as a callback function
-static void startBluetoothScan()
+//this is the actual data struct being sent through bluetooth low-energy. The size of this is hard-capped to 512 bytes defined by the bluetooth low-energy standard
+typedef struct TableSteeringData
 {
-	int error;
-	error = bt_le_scan_start(&blueToothScanConfig, deviceFound);
-	if (error) {
-		declareException();
-	}
-}
+	//the new target height the user wants to reach
+	int tableTargetHeight;
+	//an integer which the service can use to differentiate between different users.
+	//Currently there is no any sort of service in place that provides a fail-safe guarantee of uniqueness though
+	int userIdentifier;
+} TableSteeringData;
 
+static TableSteeringData steeringData = {0, 0};
+//callback functions associated with the GATT bluetooth low-energy layer
 
-
-//a callback function
-static void deviceFound(const bt_addr_le_t *address, int8_t rssi, uint8_t type,
-			 struct net_buf_simple *ad)
-{
-	DebugBlinker ledOne(1);
-	ledOne.ledOn();
-	DebugPrinter printer;
-	printer<<"\nRSSI: "<<rssi;
-
-	char addressString[BT_ADDR_LE_STR_LEN];
-	int error;
-
-	/*if (defaultConnection) {
-		return;
-	}*/
-
-	//We're only interested in connectable events
-	if (type != BT_GAP_ADV_TYPE_ADV_IND &&
-	    type != BT_GAP_ADV_TYPE_ADV_DIRECT_IND) {
-		return;
-	}
-
-	bt_addr_le_to_str(address, addressString, sizeof(addressString));
-
-	printer<<"\nAdderss: "<<addressString;
-	// connect only to devices in close proximity
-	if (rssi < -70) {
-		return;
-	}
-
-	if (bt_le_scan_stop()) {
-		printer<< "\nScan stop failed I guess\n";
-		return;
-	}
-
-	error = bt_conn_le_create(address, &createConnectionParameters,
-				&defaultConnectionParameters, &defaultConnection);
-	DebugBlinker ledThree(3);
-	DebugBlinker ledTwo(2);
-	ledTwo.ledOff();
-	ledThree.ledOn();
-	if (error) {
-		startBluetoothScan();
-		ledTwo.ledOn();
-	}
-}
-
-
-//a callback function
-static void bluetoothConnected(struct bt_conn *connection, uint8_t error)
+//this gets called when a GATT attribute has been received(?)
+static ssize_t received(struct bt_conn *conn, const struct bt_gatt_attr *attr, void *buf, uint16_t len, uint16_t offset)
 {
 	DebugPrinter printer;
-	printer << "Bluetooth connected!";
-	char address[BT_ADDR_LE_STR_LEN];
-
-	bt_addr_le_to_str(bt_conn_get_dst(connection), address, sizeof(address));
-
-	if (error) {
-
-		bt_conn_unref(defaultConnection);
-		defaultConnection = NULL;
-
-		startBluetoothScan();
-		return;
-	}
-
-	if (connection != defaultConnection) {
-		return;
-	}
-
-	bt_conn_disconnect(connection, BT_HCI_ERR_REMOTE_USER_TERM_CONN);
+	printer << "SteeringData received\n";
+	return 0;
 }
-//a callback function
-static void bluetoothDisconnected(struct bt_conn *connection, uint8_t reason)
+//this gets called when a GATT attribute has been written to(?)
+static ssize_t written(struct bt_conn *conn, const struct bt_gatt_attr *attr, const void *buf, uint16_t len, uint16_t offset, uint8_t flags)
 {
 	DebugPrinter printer;
-	printer << "Bluetooth Disconnected!";
-		char address[BT_ADDR_LE_STR_LEN];
-
-	if (connection != defaultConnection) {
-		return;
-	}
-
-	bt_addr_le_to_str(bt_conn_get_dst(connection), address, sizeof(address));
-
-	bt_conn_unref(defaultConnection);
-	defaultConnection = NULL;
-
-	startBluetoothScan();
+	printer << "SteeringData written\n";
+	return 0;
 }
 
-static struct bt_conn_cb connectionCallbacks = {
-		.connected = bluetoothConnected,
-		.disconnected = bluetoothDisconnected,
+//GATT attribute that carries with it the data payload required to steer the table
+static struct bt_gatt_attr tableSteerRequest = 
+{
+	//WARNING: THE FOLLOWING LINE IS SHADY
+	.uuid = (bt_uuid*)&tableControlUUID16,
+	.read = received,
+	.write = written,
+	.user_data = &steeringData,
+	.perm = (BT_GATT_PERM_READ | BT_GATT_PERM_WRITE)
+};
+static struct bt_gatt_service tableControlService =
+{
+	//we should be needing only one attribute here
+	.attrs = &tableSteerRequest,
+	.attr_count = 1
+	//sys_snode_t node <- no idea what this is. Who knows if it's important
 };
 
-void BluetoothReadyCallback(int error)
-{
-	if(error)
-	{
-		declareException();
-	}
-}
-
-BluetoothModule::BluetoothModule()
-{
-    if(!initialized)
-    {
-        int error = 0;
-        initialized = true;
-        error = bt_enable(BluetoothReadyCallback);
-		bt_conn_cb_register(&connectionCallbacks);
-        if (error)
-		{
-            declareException();
-	    }
-    }
-}
-
-void BluetoothModule::startScanning()
-{
-	startBluetoothScan();
-}
-
-static const struct bt_data ad[] = {
+//the board keeps repeating sending this data to the air repeatedly (and then waits for potential connections?)
+static const struct bt_data advertisingData[] = {
 	BT_DATA_BYTES(BT_DATA_FLAGS, BT_LE_AD_NO_BREDR),
 	BT_DATA_BYTES(BT_DATA_UUID16_ALL, 0xaa, 0xfe),
 	BT_DATA_BYTES(BT_DATA_SVC_DATA16,
 		      0xaa, 0xfe, // Eddystone UUID
-		      0x10, // Eddystone-URL frame type
-		      0x00, // Calibrated Tx power at 0m
+		      0x10, // Eddystone-URL frame type 
+		      0x00, // Calibrated Tx power at 0m 
 		      0x00, // URL Scheme Prefix http://www.
 		      'z', 'e', 'p', 'h', 'y', 'r',
 		      'p', 'r', 'o', 'j', 'e', 'c', 't',
 		      0x08) // .org 
 };
 
-static const struct bt_data sd[] = {
-	
+static const struct bt_data scanResponseData[] = {
 	BT_DATA(BT_DATA_NAME_COMPLETE, DEVICE_NAME, DEVICE_NAME_LEN),
 };
 
-struct bt_le_adv_param advertisingParameters
+//callback functions associated with the GATT bluetooth low-energy layer
+namespace GAPCallbacks
+{
+	static void connected(struct bt_conn *connection, uint8_t error)
+	{
+		DebugPrinter printer;
+		char address[BT_ADDR_LE_STR_LEN];
+
+		bt_addr_le_to_str(bt_conn_get_dst(connection), address, sizeof(address));
+
+		if (error) {
+			declareException();
+			return;
+		}
+
+		printer << "connected to: " << address << "\n";
+	}
+
+	static void disconnected(struct bt_conn *connection, uint8_t reason)
+	{
+		DebugPrinter printer;
+		char address[BT_ADDR_LE_STR_LEN];
+
+		bt_addr_le_to_str(bt_conn_get_dst(connection), address, sizeof(address));
+
+		printer << "Disconnected from " << address << ". Reason: " << reason << "\n";
+	}
+};
+
+
+struct bt_conn_cb connectionCallbacks
+{
+	.connected = GAPCallbacks::connected,
+	.disconnected = GAPCallbacks::disconnected,
+};
+
+
+//this struct defines how the board sends advertisements
+static struct bt_le_adv_param advertisingParameters =
 {
 	.id = BT_ID_DEFAULT,
 	.sid = 0,
 	.secondary_max_skip = 0,
-	.options = 0,
+	.options = (BT_LE_ADV_OPT_CONNECTABLE | BT_LE_ADV_OPT_SCANNABLE),
 	.interval_min = BT_GAP_ADV_SLOW_INT_MIN,
 	.interval_max = BT_GAP_ADV_SLOW_INT_MAX,
-	.peer = NULL
+	.peer = NULL,
 };
 
-
-void BluetoothModule::startAdvertising()
+//callback when bluetooth is enabled
+void bluetoothReady(int error)
 {
-	int error = bt_le_adv_start(&advertisingParameters, ad, ARRAY_SIZE(ad),
-		sd, ARRAY_SIZE(sd));
-
-	/*int error = bt_le_adv_start(const struct bt_le_adv_param *param,
-		    const struct bt_data *ad, size_t ad_len,
-		    const struct bt_data *sd, size_t sd_len);*/
+	if (error) {
+		declareException();
+		return;
+	}
+	//the bluetooth module is ready for use: therefore we should begin advertising
+	error = bt_le_adv_start(&advertisingParameters, advertisingData, ARRAY_SIZE(advertisingData),
+			      scanResponseData, ARRAY_SIZE(scanResponseData));
+	if (error) {
+		declareException();
+		return;
+	}
+	error = bt_gatt_service_register(&tableControlService);
 	if(error)
 	{
-		DebugPrinter printer;
 		declareException();
-		printer << "Advertising failed to start ()\n";
 	}
 }
+
+void startBluetooth()
+{
+	bt_conn_cb_register(&connectionCallbacks);
+	int error = bt_enable(bluetoothReady);
+	if(error)
+	{
+		declareException();
+	}
+}
+
+struct bt_gatt_attr koira {
+	.uuid = TABLE_HEIGHT_GATT_SERVICE_UUID,
+	.handle = 0,
+	.perm = 0,
+	.read = NULL,
+	.write = NULL,
+};
+
+//currently, only one
+struct bt_gatt_read_params kissa 
+{
+	.func = 
+};

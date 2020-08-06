@@ -1,10 +1,9 @@
 #include <zephyr.h>
 #include "DebugBlinker.hpp"
-#include "EncoderAnalyzer.hpp"
 #include "MotorController.hpp"
 
 #include "DebugPrinter.hpp"
-
+#include "BluetoothModule.hpp"
 #include <string.h>
 #define ONE_SECOND 1000
 #include <stdio.h>
@@ -15,22 +14,13 @@
 void main(void)
 {
 	//This is a working example demonstration of DebugBlinky class features.
-	k_msleep(5000);
 	DebugBlinker ledOne(1);
 	DebugBlinker ledTwo(2);
 	DebugBlinker ledThree(3);
+	DebugPrinter printer;
+	printer << "asd\n";
 	ledThree.ledOff();
 	ledOne.ledOff();
 	ledTwo.ledOff();
-	DebugPrinter printer;
-	BluetoothModule bluetooth;
-	k_msleep(5000);
-	bluetooth.startAdvertising();
-	while(true)
-	{
-		k_msleep(2);
-		int pos = analyzer.updateAndGetDeskPosition();
-		printer << pos << "\n";
-		k_msleep(200);
-	}
+	startBluetooth();
 }
