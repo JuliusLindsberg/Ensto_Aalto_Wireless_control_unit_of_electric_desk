@@ -164,3 +164,17 @@ void startBluetooth()
 		declareException();
 	}
 }
+
+struct bt_gatt_attr koira {
+	.uuid = TABLE_HEIGHT_GATT_SERVICE_UUID,
+	.handle = 0,
+	.perm = 0,
+	.read = NULL,
+	.write = NULL,
+};
+
+//currently, only one
+struct bt_gatt_read_params kissa 
+{
+	.func = 
+};
