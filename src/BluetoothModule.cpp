@@ -148,7 +148,7 @@ void bluetoothReady(int error)
 		declareException();
 		return;
 	}
-	error = bt_gatt_service_register(&tableControlService);
+	error = bt_register_gatt_service(&tableControlService);
 	if(error)
 	{
 		declareException();
@@ -164,17 +164,3 @@ void startBluetooth()
 		declareException();
 	}
 }
-
-struct bt_gatt_attr koira {
-	.uuid = TABLE_HEIGHT_GATT_SERVICE_UUID,
-	.handle = 0,
-	.perm = 0,
-	.read = NULL,
-	.write = NULL,
-};
-
-//currently, only one
-struct bt_gatt_read_params kissa 
-{
-	.func = 
-};
