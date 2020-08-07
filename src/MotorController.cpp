@@ -184,7 +184,7 @@ void MotorController::run()
 {
     DebugPrinter printer;
     //DEBUGGING REMOVE THIS
-    bluetoothSteerRequest(120);
+    //bluetoothSteerRequest(120);
     //REMOVE THIS END
     while(1)
     {
