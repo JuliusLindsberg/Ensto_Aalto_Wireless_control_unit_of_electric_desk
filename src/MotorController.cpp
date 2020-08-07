@@ -10,9 +10,9 @@
 #define BUTTON_UP_INPUT 1
 //p1.02
 #define BUTTON_DOWN_INPUT 2
-//p1.03
-#define BUTTON_UP_OUTPUT 4
 //p1.04
+#define BUTTON_UP_OUTPUT 4
+//p1.05
 #define BUTTON_DOWN_OUTPUT 5
 
 
