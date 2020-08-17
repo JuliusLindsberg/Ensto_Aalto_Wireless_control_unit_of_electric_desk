@@ -19,6 +19,8 @@ void main(void)
 	DebugBlinker ledThree(3);
 	DebugPrinter printer;
 	printer << "asd\n";
+	k_msleep(10000);
+	printer << "starting bt now\n";
 	ledThree.ledOff();
 	ledOne.ledOff();
 	ledTwo.ledOff();
