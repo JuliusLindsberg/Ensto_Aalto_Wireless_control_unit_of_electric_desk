@@ -3,7 +3,7 @@
 #include "MotorController.hpp"
 
 #include "DebugPrinter.hpp"
-
+#include "BluetoothModule.hpp"
 #include <string.h>
 #define ONE_SECOND 1000
 #include <stdio.h>
