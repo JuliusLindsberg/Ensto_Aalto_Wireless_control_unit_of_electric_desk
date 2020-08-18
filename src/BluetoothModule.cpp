@@ -18,7 +18,7 @@
 DebugPrinter printer;
 MotorController* controllerSet = nullptr;
 
-void setController(MotorController* controller)
+void changeController(MotorController* controller)
 {
 	controllerSet = controller;
 }
@@ -184,8 +184,9 @@ void bluetoothReady(int error)
 	printer << "bluetooth ready\n";
 }
 
-void startBluetooth()
+void startBluetooth(MotorController* controller)
 {
+	changeController(controller);
 	bt_conn_cb_register(&connectionCallbacks);
 	int error = bt_enable(bluetoothReady);
 	if(error)

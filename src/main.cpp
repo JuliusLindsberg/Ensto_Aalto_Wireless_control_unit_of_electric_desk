@@ -22,7 +22,6 @@ void main(void)
 	ledTwo.ledOff();
 	k_msleep(10000);
 	MotorController controller;
-	setController(&controller);
-	startBluetooth();
+	startBluetooth(&controller);
 	controller.run();
 }

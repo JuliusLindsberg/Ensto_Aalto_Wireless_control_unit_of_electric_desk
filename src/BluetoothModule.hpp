@@ -12,9 +12,9 @@
 #define DEVICE_NAME_LEN (sizeof(DEVICE_NAME) - 1)
 
 void bluetoothReadyCallback(int err);
-void startBluetooth();
+void startBluetooth(MotorController* controller);
 //sets the controller object which the bluetooth functionality sends it's data to
-void setController(MotorController* controller);
+void changeController(MotorController* controller);
 
 
 #endif
