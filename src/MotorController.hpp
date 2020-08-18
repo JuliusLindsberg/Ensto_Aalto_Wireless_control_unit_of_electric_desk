@@ -31,8 +31,8 @@ class MotorController {
     public:
     ControlState getState();
     MotorController();
-    void bluetoothSteerRequest(int newTargetHeight);
-    //a forever blocking function that should either have it's own seperate thread or be the program's main-loop
+    void steerRequest(int newTargetHeight);
+    //a forever blocking function that should either have it's own seperate thread or be the program's main loop
     void run();
 };
 

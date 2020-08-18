@@ -183,9 +183,6 @@ ControlState MotorController::controlStateBluetooth(int tableHeight, ButtonState
 void MotorController::run()
 {
     DebugPrinter printer;
-    //DEBUGGING REMOVE THIS
-    //bluetoothSteerRequest(120);
-    //REMOVE THIS END
     while(1)
     {
         k_msleep(1);
@@ -220,9 +217,8 @@ void MotorController::setState(ControlState newState)
     controlState = newState;
 }
 
-void MotorController::bluetoothSteerRequest(int newTargetHeight)
+void MotorController::steerRequest(int newTargetHeight)
 {
-    //this has to be reworked when bluetooth branch gets more progressed
     setState(ControlState::BLUETOOTH);
     targetHeight = newTargetHeight;
     if( analyzer.lastDeskPosition() < newTargetHeight )

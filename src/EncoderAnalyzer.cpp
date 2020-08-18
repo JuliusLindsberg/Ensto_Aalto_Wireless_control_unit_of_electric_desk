@@ -69,7 +69,7 @@ EncoderAnalyzer::EncoderAnalyzer()
         lastSample = 0;
         signalLevel = 0;
         //will be retrieved from memory
-        encoderStep = 100;
+        encoderStep = 1;
         adcDevice = device_get_binding("ADC_0");
         //inputChannel = INPUT_CHANNEL;
         if(!adcDevice)
@@ -132,7 +132,7 @@ int EncoderAnalyzer::updateAndGetDeskPosition()
 {
   short debugSample = getSample();
   DebugPrinter printer;
-  printer << debugSample << "\n";
+  printer << debugSample << " - sample voltage reading\n";
   analyzeStep(debugSample);
   return encoderStep;
 }

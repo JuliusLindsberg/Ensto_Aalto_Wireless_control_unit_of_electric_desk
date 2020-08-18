@@ -16,7 +16,12 @@
 #include <bluetooth/services/hrs.h>
 
 DebugPrinter printer;
+MotorController* controllerSet = nullptr;
 
+void setController(MotorController* controller)
+{
+	controllerSet = controller;
+}
 /*const struct bt_uuid_16 tableControlUUID16 =
 {
 	.uuid = {BT_UUID_TYPE_16},
@@ -53,24 +58,10 @@ static ssize_t written(struct bt_conn *conn, const struct bt_gatt_attr *attr, co
 	const char* value = (char*)attr->user_data;
 	printer.PrintInt(*(short*)buf);
 	steeringData.tableTargetHeight = *(short*)buf;
-	/*if(offset + len > sizeof(TableSteeringData))
+	if(controllerSet)
 	{
-		declareException();
-		return -1;
+		controllerSet->steerRequest(steeringData.tableTargetHeight);
 	}
-	printer << "SteeringData written to:\n";
-	//steeringData.tableTargetHeight = *value;
-	//steeringData.tableTargetHeight = (0xff & value[0] << 8) + 0xff & value[1];
-	printer << steeringData.tableTargetHeight << " < steering data \n";
-	int bytesRead = bt_gatt_attr_read(conn, attr, (char*)&steeringData.tableTargetHeight, len, offset, value, sizeof(char) );
-	
-	if(bytesRead < 0)
-	{
-		declareException();
-	}
-	printer.PrintInt(bytesRead);
-	printer<<" asd \n";
-	printer.PrintInt(steeringData.tableTargetHeight);*/
 	return 1;
 }
 //GATT attribute that carries with it the data payload required to steer the table

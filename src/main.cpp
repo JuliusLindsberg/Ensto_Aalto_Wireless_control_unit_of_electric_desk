@@ -13,7 +13,6 @@
 
 void main(void)
 {
-	//This is a working example demonstration of DebugBlinky class features.
 	DebugBlinker ledOne(1);
 	DebugBlinker ledTwo(2);
 	DebugBlinker ledThree(3);
@@ -23,6 +22,7 @@ void main(void)
 	ledTwo.ledOff();
 	k_msleep(10000);
 	MotorController controller;
-	//BluetoothModule bluetooth;
+	setController(&controller);
+	startBluetooth();
 	controller.run();
 }
