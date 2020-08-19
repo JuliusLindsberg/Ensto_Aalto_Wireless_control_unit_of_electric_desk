@@ -146,15 +146,18 @@ ControlState MotorController::controlStateButton(int tableHeight, ButtonState bu
     if(buttonState == ButtonState::NOT_PRESSED)
     {
         steerMotor(ButtonState::NOT_PRESSED);
+        analyzer.setTargetDirection(TargetDirection::NONE);
     }
     else if(buttonState == ButtonState::DOWN)
     {
+        analyzer.setTargetDirection(TargetDirection::DOWN_DIRECTION);
         //user wants to steer downwards via button press
         steerMotor(ButtonState::DOWN);
     }
     else if(buttonState == ButtonState::UP)
     {
         //user wants to steer upwards via button press
+        analyzer.setTargetDirection(TargetDirection::UP_DIRECTION);
         steerMotor(ButtonState::UP);
     }
     else if(buttonState == ButtonState::BOTH)
