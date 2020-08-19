@@ -20,7 +20,6 @@ void main(void)
 	ledThree.ledOff();
 	ledOne.ledOff();
 	ledTwo.ledOff();
-	k_msleep(10000);
 	MotorController controller;
 	startBluetooth(&controller);
 	controller.run();
