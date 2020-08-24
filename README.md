@@ -17,6 +17,9 @@ Programming language used is C++ or plain C. Not at all every feature of C++ is 
 See: https://docs.zephyrproject.org/1.9.0/kernel/other/cxx_support.html
 ### Our code
 See doc/API.md for our API reference.
+### Arduino table control folder
+Contents of said folder don't have an active role in the project and are there just for storage purposes only. They were used to try out some concepts and
+electrical circuits with a seperate arduino board simultaneously.
 ## Getting started
 Developing and building our project should be not very different from building any other zephyr project. As a bit of a warning Zephyr's work enviroment
 takes a lot of space (several gigabytes) from your hard drive.
