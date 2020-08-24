@@ -31,18 +31,35 @@ Will power off a led. Supports leds 1, 2 and 3.
 
 ## MotorController
 
-This class is responsible for emulating the control signal of the desk's physical button presses. It also is supposed to enforce safety limits on maximum up and down positions and determining on which control signal should be listened to and at what times as a finite state machine.
+This class is responsible for emulating the control signal of the desk's physical button presses. It also is supposed to enforce safety limits on maximum up and down positions and determining on which control signal should be listened to and at what times as a finite state machine. 
+
+Currently, unfortunately, creating multiple objects of this class causes undefined behaviour!
+
+###enum ButtonState
+The electric desk's control button has four logical states it can be in. Our microcontroller tries to emulate them so that when a user presses the button
+our controller functions as if it wouldn't be there at all catching the signal.
+
+###enum ControlState
+The MotorController interlanny functions as a finite state machine. Currently it has two states: BLUETOOTH and BUTTON. Every state has it's respective member
+function responsible for sending the appropriate control signals to the motor and transitioning between states.
 
 Member functions:
 
-### void steerMotor(ButtonState directive)
+### void steerRequest(int newTargetHeight)
 
-Tells motorcountroller that it should act as if a button was pressed. This function should be changed to private eventually.
+Tells MotorController to steer itself autonomously to a set target height. The maximum range of table right now is from 0 to three or four hundred.
+The value represents encoder steps which we spy on and is therefore not strictly bound to any physical unit of height.
 
-### ButtonState readButtonState()
+### ControlState getState()
 
-Returns the current state of the physical direction button.
+Returns in which control state MotorController is in right now.
+
+### run()
+
+a forever blocking function that keeps running the internal state machine to steer the table according to user inputs.
 
 ### EncoderAnalyzer
 
-This class analyzes the data which the desk's encoder provides with the help of an ADC pin.
+This class analyzes the data which the desk's encoder provides with the help of an ADC pin. It is used by MotorController class internally and provides no useful
+functionality outside of that.
+
