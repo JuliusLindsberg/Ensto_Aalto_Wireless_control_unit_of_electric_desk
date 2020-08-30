@@ -89,7 +89,7 @@ is between 0 and somewhere around 400. Requests that differ from this range are 
 
 Returns in which control state MotorController is in right now.
 
-### run()
+### void run()
 
 a forever blocking function which keeps running the internal state machine logic to steer the table according to their respective user inputs.
 
@@ -103,3 +103,4 @@ functionality outside of that.
 This is a more of a c-style interface responsible for implementing bluetooth functionality. It mostly has asynchronous functions and callback functions that describe
 what is supposed to happen after event x happening. The c-style approach is because from our experience asynchronous functions combined with c++-style objects
 do not really fit together well. It defines a custom bluetooth GATT service that has a 128-bit UUID of 6495c7ad-e0cc-4c2c-87c8-e8ad2f964b03 and advertises said service this UUID should be able to be changed with just one line of code. Naturally though the code of your BLE clients should be updated as well.
+
