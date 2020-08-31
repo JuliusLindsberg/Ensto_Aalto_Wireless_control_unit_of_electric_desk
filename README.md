@@ -6,6 +6,8 @@ Our aim currently is to provide a working solution for only specific hardware. I
 hardware choices too but quite certainly our solution is not going to work right out the box.
 ### Microcontroller: NRF52840
 NRF52840 provides adequate support for bluetooth low energy and potential for control via NFC tags.
+### Desk interface module
+Module for interfacing between nrf52840 Dev Kit and Martela electric desk. Not necessarily compatible with other manufacturers. KiCad files included.
 ## Software
 
 ### Zephyr RTOS
