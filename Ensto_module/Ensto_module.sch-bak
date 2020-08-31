@@ -1,0 +1,334 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Connector:8P8C 8P8C_button1
+U 1 1 5F241219
+P 5250 6250
+F 0 "8P8C_button1" V 5353 5820 50  0000 R CNN
+F 1 "8P8C" V 5262 5820 50  0000 R CNN
+F 2 "Connector_RJ:RJ45_Amphenol_54602-x08_Horizontal" V 5250 6275 50  0001 C CNN
+F 3 "~" V 5250 6275 50  0001 C CNN
+	1    5250 6250
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector:8P8C 8P8C_MCU1
+U 1 1 5F2422B7
+P 4050 6250
+F 0 "8P8C_MCU1" V 4153 5820 50  0000 R CNN
+F 1 "8P8C" V 4062 5820 50  0000 R CNN
+F 2 "Connector_RJ:RJ45_Amphenol_54602-x08_Horizontal" V 4050 6275 50  0001 C CNN
+F 3 "~" V 4050 6275 50  0001 C CNN
+	1    4050 6250
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector:Conn_01x08_Male GPIO_button1
+U 1 1 5F24774A
+P 7150 4750
+F 0 "GPIO_button1" H 7122 4632 50  0000 R CNN
+F 1 "Conn_01x08_Male" H 7122 4723 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical" H 7150 4750 50  0001 C CNN
+F 3 "~" H 7150 4750 50  0001 C CNN
+	1    7150 4750
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Conn_01x08_Male Support_pins1
+U 1 1 5F249ADF
+P 3450 3350
+F 0 "Support_pins1" H 3558 3831 50  0000 C CNN
+F 1 "Conn_01x08_Male" H 3558 3740 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical" H 3450 3350 50  0001 C CNN
+F 3 "~" H 3450 3350 50  0001 C CNN
+	1    3450 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Conn_01x06_Male Analog_pins1
+U 1 1 5F24AD47
+P 3650 4450
+F 0 "Analog_pins1" H 3758 4831 50  0000 C CNN
+F 1 "Conn_01x06_Male" H 3758 4740 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" H 3650 4450 50  0001 C CNN
+F 3 "~" H 3650 4450 50  0001 C CNN
+	1    3650 4450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R 220k_1
+U 1 1 5F25119E
+P 5300 4150
+F 0 "220k_1" V 5093 4150 50  0000 C CNN
+F 1 "R" V 5184 4150 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0309_L9.0mm_D3.2mm_P15.24mm_Horizontal" V 5230 4150 50  0001 C CNN
+F 3 "~" H 5300 4150 50  0001 C CNN
+	1    5300 4150
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R 22k1
+U 1 1 5F2516C0
+P 2800 4800
+F 0 "22k1" H 2730 4754 50  0000 R CNN
+F 1 "R" H 2730 4845 50  0000 R CNN
+F 2 "Resistor_THT:R_Axial_DIN0309_L9.0mm_D3.2mm_P15.24mm_Horizontal" V 2730 4800 50  0001 C CNN
+F 3 "~" H 2800 4800 50  0001 C CNN
+	1    2800 4800
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R 56k1
+U 1 1 5F251B9E
+P 2800 5100
+F 0 "56k1" H 2870 5146 50  0000 L CNN
+F 1 "R" H 2870 5055 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0309_L9.0mm_D3.2mm_P15.24mm_Horizontal" V 2730 5100 50  0001 C CNN
+F 3 "~" H 2800 5100 50  0001 C CNN
+	1    2800 5100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R 1k1
+U 1 1 5F252403
+P 2800 5400
+F 0 "1k1" H 2870 5446 50  0000 L CNN
+F 1 "R" H 2870 5355 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0309_L9.0mm_D3.2mm_P15.24mm_Horizontal" V 2730 5400 50  0001 C CNN
+F 3 "~" H 2800 5400 50  0001 C CNN
+	1    2800 5400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R 10k1
+U 1 1 5F252628
+P 2800 5700
+F 0 "10k1" H 2870 5746 50  0000 L CNN
+F 1 "R" H 2870 5655 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0309_L9.0mm_D3.2mm_P15.24mm_Horizontal" V 2730 5700 50  0001 C CNN
+F 3 "~" H 2800 5700 50  0001 C CNN
+	1    2800 5700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R 220_2
+U 1 1 5F252959
+P 4300 3500
+F 0 "220_2" H 4370 3546 50  0000 L CNN
+F 1 "R" H 4370 3455 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0309_L9.0mm_D3.2mm_P15.24mm_Horizontal" V 4230 3500 50  0001 C CNN
+F 3 "~" H 4300 3500 50  0001 C CNN
+	1    4300 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R 220_1
+U 1 1 5F253046
+P 4300 3200
+F 0 "220_1" H 4370 3246 50  0000 L CNN
+F 1 "R" H 4370 3155 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0309_L9.0mm_D3.2mm_P15.24mm_Horizontal" V 4230 3200 50  0001 C CNN
+F 3 "~" H 4300 3200 50  0001 C CNN
+	1    4300 3200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Transistor_FET:BS170 Down_transistor1
+U 1 1 5F2539F0
+P 5650 4150
+F 0 "Down_transistor1" H 5854 4196 50  0000 L CNN
+F 1 "BS170" H 5854 4105 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-92_Inline" H 5850 4075 50  0001 L CIN
+F 3 "http://www.fairchildsemi.com/ds/BS/BS170.pdf" H 5650 4150 50  0001 L CNN
+	1    5650 4150
+	1    0    0    -1  
+$EndComp
+Text GLabel 9150 5550 2    50   UnSpc ~ 0
+power_1
+Text GLabel 9150 5000 2    50   UnSpc ~ 0
+power_1
+Text GLabel 9150 5100 2    50   UnSpc ~ 0
+power_2
+Text GLabel 9150 5300 2    50   UnSpc ~ 0
+encoder_GND
+Text GLabel 9150 5200 2    50   UnSpc ~ 0
+encoder_24V
+Text GLabel 2800 5250 2    50   UnSpc ~ 0
+encoder_3V
+Text GLabel 3850 4250 2    50   UnSpc ~ 0
+encoder_3V
+Text GLabel 2800 4650 0    50   UnSpc ~ 0
+encoder_24V
+Text GLabel 2800 5850 0    50   UnSpc ~ 0
+encoder_GND
+Text GLabel 5150 4150 0    50   UnSpc ~ 0
+Button_GND
+NoConn ~ 4950 5850
+NoConn ~ 5050 5850
+Text GLabel 5150 5850 1    50   UnSpc ~ 0
+Button_up
+NoConn ~ 5250 5850
+NoConn ~ 5350 5850
+Text GLabel 5450 5850 1    50   UnSpc ~ 0
+Button_down
+NoConn ~ 5550 5850
+Text GLabel 4850 5850 1    50   UnSpc ~ 0
+Button_GND
+NoConn ~ 3750 5850
+NoConn ~ 3850 5850
+Text GLabel 3950 5850 1    50   UnSpc ~ 0
+MCU_up
+NoConn ~ 4050 5850
+NoConn ~ 4150 5850
+Text GLabel 4250 5850 1    50   UnSpc ~ 0
+MCU_down
+Text GLabel 3650 5850 1    50   UnSpc ~ 0
+MCU_GND
+Text GLabel 4350 5850 1    50   UnSpc ~ 0
+MCU_5V
+Text GLabel 5750 4350 2    50   UnSpc ~ 0
+MCU_GND
+Text GLabel 5800 5100 2    50   UnSpc ~ 0
+MCU_GND
+Text GLabel 5800 4700 2    50   UnSpc ~ 0
+MCU_up
+Text GLabel 5750 3950 2    50   UnSpc ~ 0
+MCU_down
+Text GLabel 6950 4750 0    50   UnSpc ~ 0
+Output_up
+Text GLabel 6950 4650 0    50   UnSpc ~ 0
+Output_down
+NoConn ~ 6950 4350
+NoConn ~ 6950 4450
+NoConn ~ 6950 4550
+NoConn ~ 6950 4850
+Text GLabel 5450 4150 1    50   UnSpc ~ 0
+Output_down
+NoConn ~ 6750 3100
+NoConn ~ 6750 3200
+NoConn ~ 6750 3300
+NoConn ~ 6750 3500
+NoConn ~ 6750 3600
+NoConn ~ 6750 3700
+NoConn ~ 6750 3800
+NoConn ~ 6750 3900
+NoConn ~ 6750 4000
+NoConn ~ 3650 3050
+NoConn ~ 3650 3150
+NoConn ~ 3650 3250
+NoConn ~ 3650 3450
+NoConn ~ 3650 3550
+NoConn ~ 3650 3750
+NoConn ~ 3850 4350
+NoConn ~ 3850 4450
+NoConn ~ 3850 4550
+NoConn ~ 3850 4650
+NoConn ~ 3850 4750
+Text GLabel 4300 3050 1    50   UnSpc ~ 0
+Button_up
+Text GLabel 6950 5050 0    50   UnSpc ~ 0
+Button_up
+Text GLabel 6950 4950 0    50   UnSpc ~ 0
+Button_down
+Text GLabel 4300 3650 3    50   UnSpc ~ 0
+Button_down
+Text GLabel 3650 3650 2    50   UnSpc ~ 0
+Button_GND
+Wire Wire Line
+	3650 3350 4300 3350
+Connection ~ 4300 3350
+$Comp
+L Connector:Conn_01x02_Male J11
+U 1 1 5F2ACE47
+P 4900 3000
+F 0 "J11" H 5008 3181 50  0000 C CNN
+F 1 "Conn_01x02_Male" H 5008 3090 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 4900 3000 50  0001 C CNN
+F 3 "~" H 4900 3000 50  0001 C CNN
+	1    4900 3000
+	1    0    0    -1  
+$EndComp
+Text GLabel 5100 3000 2    50   UnSpc ~ 0
+MCU_5V
+Wire Wire Line
+	5100 3100 5100 3000
+$Comp
+L Transistor_FET:BS170 Up_transistor1
+U 1 1 5F253F90
+P 5700 4900
+F 0 "Up_transistor1" H 5905 4946 50  0000 L CNN
+F 1 "BS170" H 5905 4855 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-92_Inline" H 5900 4825 50  0001 L CIN
+F 3 "http://www.fairchildsemi.com/ds/BS/BS170.pdf" H 5700 4900 50  0001 L CNN
+	1    5700 4900
+	1    0    0    -1  
+$EndComp
+Text GLabel 5500 4900 1    50   UnSpc ~ 0
+Output_up
+Text GLabel 5200 4900 0    50   UnSpc ~ 0
+Button_GND
+$Comp
+L Device:R 220k_2
+U 1 1 5F252766
+P 5350 4900
+F 0 "220k_2" V 5143 4900 50  0000 C CNN
+F 1 "R" V 5234 4900 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0309_L9.0mm_D3.2mm_P15.24mm_Horizontal" V 5280 4900 50  0001 C CNN
+F 3 "~" H 5350 4900 50  0001 C CNN
+	1    5350 4900
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:Conn_01x04_Male Minifit_motor1
+U 1 1 5F2B3C42
+P 8950 5100
+F 0 "Minifit_motor1" H 9058 5381 50  0000 C CNN
+F 1 "Conn_01x04_Male" H 9058 5290 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-04A2_2x02_P4.20mm_Horizontal" H 8950 5100 50  0001 C CNN
+F 3 "~" H 8950 5100 50  0001 C CNN
+	1    8950 5100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Conn_01x04_Male J8
+U 1 1 5F2B7950
+P 8950 5650
+F 0 "J8" H 9058 5931 50  0000 C CNN
+F 1 "Minifit_MCU" H 9058 5840 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-04A2_2x02_P4.20mm_Horizontal" H 8950 5650 50  0001 C CNN
+F 3 "~" H 8950 5650 50  0001 C CNN
+	1    8950 5650
+	1    0    0    -1  
+$EndComp
+Text GLabel 9150 5650 2    50   UnSpc ~ 0
+power_2
+Text GLabel 9150 5750 2    50   UnSpc ~ 0
+encoder_24V
+Text GLabel 9150 5850 2    50   UnSpc ~ 0
+encoder_GND
+$Comp
+L Connector:Conn_01x10_Male GPIO_extra1
+U 1 1 5F24BAE3
+P 6950 3600
+F 0 "GPIO_extra1" V 6950 2850 50  0000 C CNN
+F 1 "Conn_01x10_Male" H 6876 3528 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical" H 6950 3600 50  0001 C CNN
+F 3 "~" H 6950 3600 50  0001 C CNN
+	1    6950 3600
+	-1   0    0    1   
+$EndComp
+NoConn ~ 6750 3400
+$EndSCHEMATC
